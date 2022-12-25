@@ -1,0 +1,20 @@
+<!-- <form [formGroup]="category" (ngSubmit)="newCategory()">
+    <label for="category-name">Название категории</label>
+    <input id="category-name" formControlName="name">
+
+
+    <button type="submit">Создать</button>
+</form> -->
+
+
+<form [formGroup]="category" (ngSubmit)="newCategory()">
+
+    <mat-form-field class="example-full-width">
+        <mat-label>Category name</mat-label>
+        <input matInput id="category-name" formControlName="name">
+      </mat-form-field>
+      <br>
+
+      <button mat-raised-button color="accent" type="submit">Create</button>
+
+</form>

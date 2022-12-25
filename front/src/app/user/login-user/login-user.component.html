@@ -1,0 +1,24 @@
+<h2>Веедите логин и пароль</h2>
+
+<form [formGroup]="form" (ngSubmit)="login()">
+
+    <mat-form-field class="example-full-width">
+        <mat-label>Username:</mat-label>
+        <input matInput formControlName="username">
+      </mat-form-field>
+
+    <br>
+
+    <mat-form-field class="example-full-width">
+        <mat-label>Password:</mat-label>
+        <input matInput formControlName="password">
+    </mat-form-field>
+    <br>
+
+    <button mat-flat-button color="accent">Войти</button>
+    <br>
+
+</form>
+<br>
+
+<a routerLink="/own_user"><button mat-raised-button color="primary">Кабинет</button></a>
