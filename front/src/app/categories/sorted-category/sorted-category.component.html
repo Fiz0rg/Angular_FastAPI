@@ -1,4 +1,4 @@
 
 <mat-card *ngFor="let product of goodsByNameCategory">
-    <mat-option >{{product.name}}</mat-option>
+    <mat-option [routerLink]="['../../products/', product.name]">{{product.name}}</mat-option>
 </mat-card>

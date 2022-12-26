@@ -1,7 +1,7 @@
 <a routerLink="/create_product"><button mat-raised-button>Добавить товар</button></a>
 
-<mat-selection-list *ngFor="let product of goods">
-    <mat-list-option>
+<mat-list *ngFor="let product of goods">
+    <mat-option [routerLink]="['/products/', product.name]">
       {{product.name}}
-    </mat-list-option>
-  </mat-selection-list>
+    </mat-option>
+  </mat-list>

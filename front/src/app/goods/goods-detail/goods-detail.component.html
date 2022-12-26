@@ -1,1 +1,6 @@
-<p>goods-detail works!</p>
+<mat-list *ngFor="let one of productSchema">
+    <mat-list-item >{{one.name}}</mat-list-item>
+    <mat-list-item >{{one.price}}</mat-list-item>
+    <mat-list-item >{{one.category.name}}</mat-list-item>
+  </mat-list>
+  
