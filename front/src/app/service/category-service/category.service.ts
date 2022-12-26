@@ -15,13 +15,10 @@ export class CategoryService {
   ) { }
 
   getAllCategories(url: string): Observable<Category[]> {
-    console.log(this.getAllCategories + url)
-
     return this.http.get<Category[]>(this.baseCategoryUrl + url)
   }
 
   createCategory(url: string, object: object): Observable<Category>{
-
     return this.http.post<Category>(this.baseCategoryUrl + url, object)
   }
 }

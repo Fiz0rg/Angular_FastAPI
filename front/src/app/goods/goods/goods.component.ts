@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Goods } from 'src/app/schemas/goods';
+import { GoodsSchema } from 'src/app/schemas/goods';
 import { GetGoodsService } from 'src/app/service/goods-service/get-goods.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { GetGoodsService } from 'src/app/service/goods-service/get-goods.service
 })
 export class GoodsComponent implements OnInit {
 
-  goods: Goods[] = [];
+  goods: GoodsSchema[] = [];
 
   constructor(
     private service: GetGoodsService,

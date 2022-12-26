@@ -1,8 +1,10 @@
 <a routerLink="/create_category"> <button mat-raised-button color="primary">Создать категорию</button></a>
 
 
-<mat-list *ngFor="let category of categories">
-    <mat-list-item>
-        {{category.name}}
-    </mat-list-item>
-</mat-list>
+<mat-card *ngFor="let category of categories">
+    <mat-option [routerLink]="['/category', category.name]">{{category.name}}</mat-option>
+</mat-card>
+
+
+
+  

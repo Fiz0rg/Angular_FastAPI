@@ -1,5 +1,7 @@
-export interface Goods {
+export interface GoodsSchema {
     name: string,
     price: number,
-    category: number,
+    category: {
+        name: string
+    },
 }

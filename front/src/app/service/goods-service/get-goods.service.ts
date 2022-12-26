@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-import { Goods } from 'src/app/schemas/goods';
+import { map, Observable } from 'rxjs';
+import { GoodsSchema } from 'src/app/schemas/goods';
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +15,12 @@ export class GetGoodsService {
     private http: HttpClient
   ) { }
 
-  getGoods(url: string): Observable<Goods[]> {
-    return this.http.get<Goods[]>(this.baseGoodsUrl + url)
+  getGoods(url: string): Observable<GoodsSchema[]> {
+    return this.http.get<GoodsSchema[]>(this.baseGoodsUrl + url)
   }
 
-  createGoods(url: string, object: object): Observable<Goods> {
-    return this.http.post<Goods>(this.baseGoodsUrl + url, object)
+  createGoods(url: string, object: object): Observable<GoodsSchema> {
+    return this.http.post<GoodsSchema>(this.baseGoodsUrl + url, object)
   }
 
 }

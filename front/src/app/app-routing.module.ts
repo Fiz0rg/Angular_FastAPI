@@ -11,6 +11,7 @@ import { GoodsComponent } from './goods/goods/goods.component';
 import { LoginUserComponent } from './user/login-user/login-user.component';
 import { TestComponent } from './user/test/test.component';
 import { OwnUserComponent } from './user/own-user/own-user.component';
+import { SortedCategoryComponent } from './categories/sorted-category/sorted-category.component';
 
 
 const routes: Routes = [
@@ -22,7 +23,8 @@ const routes: Routes = [
   {path: 'products', component: GoodsComponent},
   {path: 'login', component: LoginUserComponent},
   {path: 'test', component: TestComponent},
-  {path: 'own_user', component: OwnUserComponent}
+  {path: 'own_user', component: OwnUserComponent},
+  {path: 'category/:categoryName', component: SortedCategoryComponent}
 ]
 
 

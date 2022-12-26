@@ -29,7 +29,10 @@ import { GoodsComponent } from './goods/goods/goods.component';
 import { LoginUserComponent } from './user/login-user/login-user.component';
 import { TestComponent } from './user/test/test.component';
 import { OwnUserComponent } from './user/own-user/own-user.component';
-import { InterceptorService } from './service/interceptor-service/interceptor.service'
+import { InterceptorService } from './service/interceptor-service/interceptor.service';
+import { SortedCategoryComponent } from './categories/sorted-category/sorted-category.component';
+import { GoodsDetailComponent } from './goods/goods-detail/goods-detail.component';
+
 
 @NgModule({
   declarations: [
@@ -43,7 +46,9 @@ import { InterceptorService } from './service/interceptor-service/interceptor.se
     GoodsComponent,
     LoginUserComponent,
     TestComponent,
-    OwnUserComponent
+    OwnUserComponent,
+    SortedCategoryComponent,
+    GoodsDetailComponent,
   ],
   imports: [
     BrowserModule,

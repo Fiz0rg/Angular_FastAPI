@@ -14,8 +14,13 @@ async def create_category(category_name: CategoryName):
     return new_category
 
 
-@router.get("/get_all", response_model=List[Category], response_model_exclude={"id"})
+@router.get("/get_all", response_model=List[Category])
 async def get_all_categories():
     return await Category.objects.all()
+
+
+@router.get("/one")
+async def get_category_by_name(name: str):
+    return await Category.objects.get(name=name)
 
     
