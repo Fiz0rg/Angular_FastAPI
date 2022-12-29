@@ -32,6 +32,7 @@ import { OwnUserComponent } from './user/own-user/own-user.component';
 import { InterceptorService } from './service/interceptor-service/interceptor.service';
 import { SortedCategoryComponent } from './categories/sorted-category/sorted-category.component';
 import { GoodsDetailComponent } from './goods/goods-detail/goods-detail.component';
+import { UserBasketComponent } from './basket/user-basket/user-basket.component';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { GoodsDetailComponent } from './goods/goods-detail/goods-detail.componen
     OwnUserComponent,
     SortedCategoryComponent,
     GoodsDetailComponent,
+    UserBasketComponent,
   ],
   imports: [
     BrowserModule,
@@ -70,6 +72,7 @@ import { GoodsDetailComponent } from './goods/goods-detail/goods-detail.componen
     BrowserAnimationsModule 
   ],
   providers: [
+    
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,

@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse, HttpInterceptor } from '@angular/common/http';
+
+import { Router } from '@angular/router';
+
+import { catchError, Observable, tap } from 'rxjs';
 
 
 @Injectable()
-export class InterceptorService {
+export class InterceptorService implements HttpInterceptor {
 
-  constructor() { }
+  protected handleAuth
+
+  constructor(
+    private router: Router,
+  ) { }
 
   intercept(
     request: HttpRequest<any>,
@@ -20,9 +27,8 @@ export class InterceptorService {
       }
     });
 
-    return next.handle(request)
-
+    return next.handle(request).pipe(
+      catchError((error: HttpErrorResponse) => )
+    )
   }
-
-
 }

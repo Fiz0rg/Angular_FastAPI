@@ -41,7 +41,6 @@ export class LoginUserComponent implements OnInit {
     this.userService.login("/token", formData).subscribe((res: any) => {
       if(res.access_token){
         localStorage.setItem("access_token", res.access_token)
-        console.log(localStorage.getItem("access_token"))
         this.router.navigate(['/own_user'])
       }
     });

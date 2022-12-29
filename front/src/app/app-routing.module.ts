@@ -13,6 +13,8 @@ import { TestComponent } from './user/test/test.component';
 import { OwnUserComponent } from './user/own-user/own-user.component';
 import { SortedCategoryComponent } from './categories/sorted-category/sorted-category.component';
 import { GoodsDetailComponent } from './goods/goods-detail/goods-detail.component';
+import { UserBasketComponent } from './basket/user-basket/user-basket.component';
+import { AuthGuardService } from './service/auth-guard/auth-guard.service';
 
 
 const routes: Routes = [
@@ -27,6 +29,7 @@ const routes: Routes = [
   {path: 'own_user', component: OwnUserComponent},
   {path: 'category/:categoryName', component: SortedCategoryComponent},
   {path: 'products/:productName', component: GoodsDetailComponent},
+  {path: 'user_basket', component: UserBasketComponent, canActivate: [AuthGuardService]},
 ]
 
 
