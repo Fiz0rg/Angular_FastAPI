@@ -7,7 +7,7 @@ from .base_class import MetaClass
 
 class Product(Model):
     class Meta(MetaClass):
-        tablename = "product"
+        pass
 
     id: int = Integer(primary_key=True)
     name: str = String(max_length=30, unique=True, index=True)

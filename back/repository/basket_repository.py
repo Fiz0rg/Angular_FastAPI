@@ -8,8 +8,9 @@ from db.product import Product
 
 class BasketRepository:
     
-    async def get_basket_goods(user_id: int) :
-        
-        
-        user_basket = await Product.objects.select_related(['baskets', 'category']).values()
+    async def get_basket_goods(user_id: int):
+                
+        user_basket = await Product.objects.select_related(['baskets']).filter(
+            baskets__user_id=user_id
+        ).values()
         return user_basket

@@ -5,19 +5,17 @@ from fastapi import APIRouter, Security
 from fastapi.responses import RedirectResponse
 
 from db.product import Product
-from db.basket import Basket
 from db.user import Buyer
 
 from security.user import get_current_user
 
 from repository.basket_repository import BasketRepository as basket_class
-from schemas.basket import ProductInBasket
 
 
 router = APIRouter()
 
 
-@router.get("/get_my_basket", response_model=List[ProductInBasket])
+@router.get("/get_my_basket")
 async def get_my_basket(user_basket: Buyer = Security(get_current_user, scopes=['buyer'])):
     return await basket_class.get_basket_goods(user_basket.id)
 
