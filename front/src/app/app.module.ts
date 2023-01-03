@@ -72,7 +72,6 @@ import { UserBasketComponent } from './basket/user-basket/user-basket.component'
     BrowserAnimationsModule 
   ],
   providers: [
-    
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,

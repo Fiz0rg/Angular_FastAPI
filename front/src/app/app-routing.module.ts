@@ -29,7 +29,7 @@ const routes: Routes = [
   {path: 'own_user', component: OwnUserComponent},
   {path: 'category/:categoryName', component: SortedCategoryComponent},
   {path: 'products/:productName', component: GoodsDetailComponent},
-  {path: 'user_basket', component: UserBasketComponent, canActivate: [AuthGuardService]},
+  {path: 'user_basket', component: UserBasketComponent},
 ]
 
 

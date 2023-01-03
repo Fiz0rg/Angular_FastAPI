@@ -12,6 +12,7 @@ class Product(Model):
     id: int = Integer(primary_key=True)
     name: str = String(max_length=30, unique=True, index=True)
     price: Optional[int] = Integer()
+    purchases: int = Integer(default=0)
 
     category: Optional["Category"] = ForeignKey(Category, skip_reverse=True)
 
