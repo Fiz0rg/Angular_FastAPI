@@ -1,5 +1,6 @@
-<a routerLink="/create_category"> <button mat-raised-button color="primary">Создать категорию</button></a>
-
+<div *ngIf="is_admin">
+    <a routerLink="/create_category"> <button mat-raised-button color="primary">Создать категорию</button></a>
+</div>
 
 <mat-card *ngFor="let category of categories">
     <mat-option [routerLink]="['/category', category.name]">{{category.name}}</mat-option>

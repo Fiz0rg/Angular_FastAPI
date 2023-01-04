@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { GoodsSchema } from 'src/app/schemas/goods';
+import { UserSchema } from 'src/app/schemas/user';
 import { GetGoodsService } from 'src/app/service/goods-service/get-goods.service';
+import { UserService } from 'src/app/service/user-service/user.service';
 
 @Component({
   selector: 'app-goods',
@@ -11,17 +13,24 @@ import { GetGoodsService } from 'src/app/service/goods-service/get-goods.service
 export class GoodsComponent implements OnInit {
 
   goods: GoodsSchema[] = [];
+  user: boolean = false; 
 
   constructor(
-    private service: GetGoodsService,
+    private goodsService: GetGoodsService,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
     this.getGoods()
+    this.isAdminUser()
   }
 
   getGoods(): void {
-    this.service.getGoods("/get_all_products").subscribe(goods => this.goods = goods)
+    this.goodsService.getGoods("/get_all_products").subscribe(goods => this.goods = goods)
+  }
+
+  isAdminUser(): void {
+    this.userService.getCurrentUser("/users/me").subscribe(user => this.user = user.is_admin)
   }
 
 }

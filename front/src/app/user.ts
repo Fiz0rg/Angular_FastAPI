@@ -2,6 +2,7 @@ export interface UserName {
     username: string
 };
 
+
 export interface CreateUser extends UserName {
     password: string;
 };
@@ -10,6 +11,7 @@ export interface CreateUser extends UserName {
 export interface User extends CreateUser {
     id: number
 };
+
 
 export interface Scope extends CreateUser {
     scope: string

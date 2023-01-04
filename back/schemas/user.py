@@ -10,3 +10,7 @@ class PasswordUser(BaseModel):
 
 class UserCreate(UserName, PasswordUser):
     pass
+
+
+class Admin(UserCreate):
+    is_admin: bool

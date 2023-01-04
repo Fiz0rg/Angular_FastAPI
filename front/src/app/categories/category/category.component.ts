@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { CategoryService } from 'src/app/service/category-service/category.service';
 import { Category } from 'src/app/schemas/categories';
-import { MatListOption, MatSelectionList } from '@angular/material';
+import { UserService } from 'src/app/service/user-service/user.service';
 
 @Component({
   selector: 'app-category',
@@ -13,10 +13,11 @@ export class CategoryComponent implements OnInit {
 
   categories: Category[] = [];
 
-  // @Input() multiple: boolean 
+  is_admin: boolean = false;
 
   constructor(
     private categoryService: CategoryService,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
@@ -25,6 +26,10 @@ export class CategoryComponent implements OnInit {
 
   getAllCategories(): void {
     this.categoryService.getAllCategories('/get_all').subscribe(data => this.categories = data)
+  }
+
+  getCurrentUser(): void {
+    this.userService.getCurrentUser('/users/me/').subscribe(user => this.is_admin = user.is_admin)
   }
 
 }

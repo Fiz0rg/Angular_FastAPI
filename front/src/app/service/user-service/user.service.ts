@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
+import { UserSchema } from 'src/app/schemas/user';
 
 import { CreateUser, User, UserId } from 'src/app/user';
 
@@ -35,10 +36,10 @@ export class UserService {
     return this.http.post<CreateUser>(this.UsersLink + url, login, this.httpOptions)
   }
 
-  getCurrentUser(url: string): Observable<UserId> {
+  getCurrentUser(url: string): Observable<UserSchema> {
 
     // console.log(this.UsersLink + url)
-    return this.http.get<UserId>(this.UsersLink + url)
+    return this.http.get<UserSchema>(this.UsersLink + url)
   }
 
 }
