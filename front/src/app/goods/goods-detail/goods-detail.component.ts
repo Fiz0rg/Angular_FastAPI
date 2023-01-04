@@ -34,7 +34,6 @@ export class GoodsDetailComponent implements OnInit {
     this.goodsService.getGoods("/get_all_products").pipe(
       map(dataObject => dataObject.filter(
         data => data.name == this.goodsName
-        
       ))
     ).subscribe(result => this.productSchema = result)
   }

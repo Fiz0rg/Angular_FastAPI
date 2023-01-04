@@ -28,3 +28,9 @@ async def get_all():
 async def add_product_in_basket(product_name: str, current_user: Buyer = Security(get_current_user, scopes=["buyer"])):
     await ProductRepository.add_product_in_basket(product_name=product_name, user_id=current_user.id)
     return {"successful message": "Product was successfully added in your basket"}
+
+
+@router.get("/get_ten_goods")
+async def get_ten_goods():
+    a = await Product.objects.order_by("-purchases").all()
+    return a[:2]

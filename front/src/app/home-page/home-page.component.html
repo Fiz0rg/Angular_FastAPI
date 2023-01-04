@@ -1,0 +1,6 @@
+<p>home-page works!</p>
+
+
+<div *ngFor="let product of popularGoods">
+    <a [routerLink]="['../products/', product.name]">{{product.name}}</a>
+</div>

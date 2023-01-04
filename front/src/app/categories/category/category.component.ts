@@ -22,6 +22,7 @@ export class CategoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllCategories()
+    this.getCurrentUser()
   }
 
   getAllCategories(): void {

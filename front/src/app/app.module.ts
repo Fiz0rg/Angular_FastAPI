@@ -33,6 +33,7 @@ import { InterceptorService } from './service/interceptor-service/interceptor.se
 import { SortedCategoryComponent } from './categories/sorted-category/sorted-category.component';
 import { GoodsDetailComponent } from './goods/goods-detail/goods-detail.component';
 import { UserBasketComponent } from './basket/user-basket/user-basket.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { UserBasketComponent } from './basket/user-basket/user-basket.component'
     SortedCategoryComponent,
     GoodsDetailComponent,
     UserBasketComponent,
+    HomePageComponent,
   ],
   imports: [
     BrowserModule,
