@@ -30,7 +30,9 @@ export class CategoryComponent implements OnInit {
   }
 
   getCurrentUser(): void {
-    this.userService.getCurrentUser('/users/me/').subscribe(user => this.is_admin = user.is_admin)
+    if(localStorage.getItem("access_token")){
+      this.userService.getCurrentUser('/users/me/').subscribe(user => this.is_admin = user.is_admin)
+    }
   }
 
 }

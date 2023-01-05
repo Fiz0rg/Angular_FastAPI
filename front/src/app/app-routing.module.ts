@@ -15,6 +15,7 @@ import { SortedCategoryComponent } from './categories/sorted-category/sorted-cat
 import { GoodsDetailComponent } from './goods/goods-detail/goods-detail.component';
 import { UserBasketComponent } from './basket/user-basket/user-basket.component';
 import { HomePageComponent } from './home-page/home-page.component';
+import { AuthGuardService } from './service/auth-guard/auth-guard.service';
 
 
 const routes: Routes = [

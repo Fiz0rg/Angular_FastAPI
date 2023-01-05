@@ -1,3 +1,4 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -8,18 +9,12 @@ import { Observable } from 'rxjs';
 export class AuthGuardService {
 
   constructor(
-    private router: Router
+    private router: Router,
+    private http: HttpClient,
   ) { }
 
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if(localStorage.getItem("access_token")) {
-      console.log("canActive");      
-      return true;
-    }
-
-    this.router.navigate(['/login']);
-
-    return false;
+    return true
   }
 }

@@ -30,7 +30,9 @@ export class GoodsComponent implements OnInit {
   }
 
   isAdminUser(): void {
-    this.userService.getCurrentUser("/users/me").subscribe(user => this.user = user.is_admin)
+    if(localStorage.getItem("access_token")){
+      this.userService.getCurrentUser("/users/me").subscribe(user => this.user = user.is_admin)
+    }
   }
 
 }

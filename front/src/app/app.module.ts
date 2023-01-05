@@ -78,7 +78,8 @@ import { HomePageComponent } from './home-page/home-page.component';
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,
       multi: true,
-  }],
+  }
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
