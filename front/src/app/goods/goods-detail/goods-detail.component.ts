@@ -1,7 +1,9 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { GoodsSchema } from 'src/app/schemas/goods';
+import { BasketService } from 'src/app/service/basket/basket.service';
 import { GetGoodsService } from 'src/app/service/goods-service/get-goods.service';
 
 @Component({
@@ -36,6 +38,13 @@ export class GoodsDetailComponent implements OnInit {
         data => data.name == this.goodsName
       ))
     ).subscribe(result => this.productSchema = result)
+  }
+
+  addingInBasket(productName: string): void {
+
+    const url = `/add_product_in_basket?product_name=${productName}`
+    console.log(url);
+    this.goodsService.addingProductInBasket(url, productName).subscribe()
   }
 
 }

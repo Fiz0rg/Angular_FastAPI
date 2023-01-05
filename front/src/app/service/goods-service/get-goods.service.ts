@@ -23,4 +23,8 @@ export class GetGoodsService {
     return this.http.post<GoodsSchema>(this.baseGoodsUrl + url, object)
   }
 
+  addingProductInBasket(url: string, productName: string): Observable<string> {
+    return this.http.post<string>(this.baseGoodsUrl + url, productName)
+  }
+
 }

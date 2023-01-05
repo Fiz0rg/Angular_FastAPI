@@ -27,7 +27,7 @@ async def get_all():
 @router.post("/add_product_in_basket")
 async def add_product_in_basket(product_name: str, current_user: Buyer = Security(get_current_user, scopes=["buyer"])):
     await ProductRepository.add_product_in_basket(product_name=product_name, user_id=current_user.id)
-    return {"successful message": "Product was successfully added in your basket"}
+    return {"status response": "200"}
 
 
 @router.get("/get_ten_goods")

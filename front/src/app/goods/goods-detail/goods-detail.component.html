@@ -1,6 +1,10 @@
-<mat-list *ngFor="let one of productSchema">
-    <mat-list-item >{{one.name}}</mat-list-item>
-    <mat-list-item >{{one.price}}</mat-list-item>
-    <mat-list-item >{{one.category.name}}</mat-list-item>
+<mat-list *ngFor="let product of productSchema">
+    <mat-list-item >{{product.name}}</mat-list-item>
+    <mat-list-item >{{product.price}}</mat-list-item>
+    <mat-list-item >{{product.category.name}}</mat-list-item>
+
+    <button (click)="addingInBasket(product.name)">В корзину</button> 
+
   </mat-list>
   
+
