@@ -1,6 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, tap } from 'rxjs';
 import { GoodsSchema } from 'src/app/schemas/goods';
 import { BasketService } from 'src/app/service/basket/basket.service';
@@ -16,35 +16,35 @@ export class GoodsDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private goodsService: GetGoodsService,
+    private router: Router,
     ) { }
 
-  goodsName!: string
-  productSchema: GoodsSchema[] = []
+  productName!: string
+  productSchema!: GoodsSchema
 
   ngOnInit(): void {
 
     const routeParams = this.route.snapshot.paramMap 
     const categoryNameFromPath = String(routeParams.get("productName"))
 
-    this.goodsName = categoryNameFromPath
-    console.log(categoryNameFromPath);
+    this.productName = categoryNameFromPath
     
     this.getOneProduct()
   } 
 
   getOneProduct(): void {
-    this.goodsService.getGoods("/get_all_products").pipe(
-      map(dataObject => dataObject.filter(
-        data => data.name == this.goodsName
-      ))
-    ).subscribe(result => this.productSchema = result)
+    let url = `/${this.productName}`
+    this.goodsService.getOneProduct(url).subscribe(result => this.productSchema = result)
   }
 
-  addingInBasket(productName: string): void {
 
+  addingInBasket(productName: string): void {
     const url = `/add_product_in_basket?product_name=${productName}`
-    console.log(url);
-    this.goodsService.addingProductInBasket(url, productName).subscribe()
+    this.goodsService.addingProductInBasket(url, productName).subscribe( (res:any) => {
+      if(res.status_response == 200) {
+        this.router.navigate(['/products'])
+      }
+    })
   }
 
 }

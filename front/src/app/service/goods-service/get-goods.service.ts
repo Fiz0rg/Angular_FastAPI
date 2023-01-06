@@ -27,4 +27,8 @@ export class GetGoodsService {
     return this.http.post<string>(this.baseGoodsUrl + url, productName)
   }
 
+  getOneProduct(url: string): Observable<GoodsSchema> {
+    return this.http.get<GoodsSchema>(this.baseGoodsUrl + url)
+  }
+
 }
