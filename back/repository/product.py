@@ -26,13 +26,11 @@ class ProductRepository:
 
     async def add_product_in_basket(product_name: str, user_id: int):
 
-        print(product_name)
         product = await Product.objects.get(name=product_name)
         user_basket = await Basket.objects.get(user_id=user_id)
-
-        print(user_id)
-
         await user_basket.products.add(product)
 
+        product.purchases+=1
+        await product.update(_columns=['purchases'])
 
         return user_basket
