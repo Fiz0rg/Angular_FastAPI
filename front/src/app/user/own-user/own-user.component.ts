@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { UserService } from 'src/app/service/user-service/user.service';
-import { UserId } from 'src/app/user';
+import { UserId } from 'src/app/schemas/user';
 
 @Component({
   selector: 'app-own-user',

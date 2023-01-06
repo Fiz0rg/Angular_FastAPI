@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 import { UserService } from 'src/app/service/user-service/user.service';
 
-import { CreateUser, User } from '../user';
+import { UsernamePasswordUserSchema, User } from '../schemas/user';
 
 @Component({
   selector: 'app-user',
@@ -24,7 +24,7 @@ export class UserComponent implements OnInit {
     this.getUsers() 
   }
 
-  userForm = this.form.group<CreateUser>({
+  userForm = this.form.group<UsernamePasswordUserSchema>({
     username: "",
     password: "",
   })

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms'
 import { Router } from '@angular/router'
 
-import { CreateUser } from 'src/app/user';
+import { UsernamePasswordUserSchema } from 'src/app/schemas/user';
 import { UserService } from 'src/app/service/user-service/user.service';
 
 @Component({
@@ -19,7 +19,7 @@ export class RegistrationComponent implements OnInit {
 
   url = "/registration"
 
-  userForm = this.formBuilder.group<CreateUser>({
+  userForm = this.formBuilder.group<UsernamePasswordUserSchema>({
     username: '',
     password: '',
   })

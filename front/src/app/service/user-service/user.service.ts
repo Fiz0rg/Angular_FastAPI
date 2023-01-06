@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserSchema } from 'src/app/schemas/user';
 
-import { CreateUser, User, UserId } from 'src/app/user';
+import { UsernamePasswordUserSchema, User } from 'src/app/schemas/user';
 
 
 @Injectable({
@@ -28,12 +28,12 @@ export class UserService {
     return this.http.get<User[]>(this.UsersLink + url)
   }
 
-  createUser(url: string, user: object): Observable<CreateUser> {
-    return this.http.post<CreateUser>(this.UsersLink+url, user)
+  createUser(url: string, user: object): Observable<UsernamePasswordUserSchema> {
+    return this.http.post<UsernamePasswordUserSchema>(this.UsersLink+url, user)
   }
 
-  login(url: string, login: FormData): Observable<CreateUser> {
-    return this.http.post<CreateUser>(this.UsersLink + url, login, this.httpOptions)
+  login(url: string, login: FormData): Observable<UsernamePasswordUserSchema> {
+    return this.http.post<UsernamePasswordUserSchema>(this.UsersLink + url, login, this.httpOptions)
   }
 
   getCurrentUser(url: string): Observable<UserSchema> {
