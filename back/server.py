@@ -1,14 +1,12 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.security.oauth2 import *
 from fastapi.middleware.cors import CORSMiddleware
 
-from fastapi_jwt_auth import AuthJWT
 from fastapi_jwt_auth .exceptions import AuthJWTException
 
 from db.db import database
-from endpoints import category, user, basket, product, product_photo, auth
+from endpoints import category, user, basket, product, product_photo
 
 app = FastAPI()
 
@@ -57,7 +55,6 @@ app.include_router(user.router, tags=["user router"], prefix="/user")
 app.include_router(basket.router, tags=["basket router"], prefix="/basket")
 app.include_router(product.router, tags=["product router"], prefix="/product")
 app.include_router(product_photo.router, tags=["photo"], prefix="/photo")
-app.include_router(auth.router, tags=["auth"], prefix="/authorization")
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

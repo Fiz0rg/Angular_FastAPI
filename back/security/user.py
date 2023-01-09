@@ -59,7 +59,7 @@ async def get_current_user(
         authenticate_value = f"Bearer"
     credentials_exception = exceptions(headers={"WWW-Authenticate": authenticate_value})
     try:
-        payload = jwt.decode(token, os.environ['SECRET_KEY'], algorithm=os.environ['ALGORITHM'])
+        payload = jwt.decode(token, os.environ['SECRET_KEY'], algorithms=os.environ['ALGORITHM'])
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
