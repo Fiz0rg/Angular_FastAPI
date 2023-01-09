@@ -1,10 +1,14 @@
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.security.oauth2 import *
 from fastapi.middleware.cors import CORSMiddleware
 
+from fastapi_jwt_auth import AuthJWT
+from fastapi_jwt_auth .exceptions import AuthJWTException
+
 from db.db import database
-from endpoints import category, user, basket, product, product_photo
+from endpoints import category, user, basket, product, product_photo, auth
 
 app = FastAPI()
 
@@ -38,6 +42,14 @@ async def shutdown() -> None:
     if database_.is_connected:
         print("Disconnecting from  database")
         await database_.disconnect()
+
+
+@app.exception_handler(AuthJWTException)
+def authjwt_exception_handler(request: Request, exc: AuthJWTException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.message}
+    )
         
 
 app.include_router(category.router, tags=["category router"], prefix="/category")
@@ -45,6 +57,7 @@ app.include_router(user.router, tags=["user router"], prefix="/user")
 app.include_router(basket.router, tags=["basket router"], prefix="/basket")
 app.include_router(product.router, tags=["product router"], prefix="/product")
 app.include_router(product_photo.router, tags=["photo"], prefix="/photo")
+app.include_router(auth.router, tags=["auth"], prefix="/authorization")
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

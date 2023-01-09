@@ -1,23 +1,23 @@
+import os
 import datetime
-from typing import Union
 
+from typing import Union
 from jose import jwt, JWTError
 
+from fastapi_jwt_auth import AuthJWT
+
+from dotenv import load_dotenv
 from fastapi import Depends
 from fastapi.security import SecurityScopes, OAuth2PasswordBearer
-
 from passlib.context import CryptContext
 
-from pydantic import ValidationError
-
+from pydantic import BaseModel, ValidationError
 from db.user import Buyer
-
 from schemas.token import TokenData
-
 from .exeptions import exceptions
 
-SECRET_KEY = "7f18111e48f8b0f243bc48a2faa87e17541ceea805f094f11e07db807fccf337"
-ALGORITHM = "HS256"
+load_dotenv('.env')
+
 ACCESS_TOKEN_EXPIRE_MINUNES = 30
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='user/token', scopes={"buyer": "just casual user"})
@@ -50,7 +50,7 @@ def create_access_token(data: dict, expires_delta: Union[datetime.timedelta, Non
     else:
         expire = datetime.datetime.utcnow() + datetime.timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, os.environ['SECRET_KEY'], algorithm=os.environ['ALGHORITHM'])
     return encoded_jwt
 
 
@@ -63,7 +63,7 @@ async def get_current_user(
         authenticate_value = f"Bearer"
     credentials_exception = exceptions(headers={"WWW-Authenticate": authenticate_value})
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, os.environ['SECRET_KEY'], algorithm=os.environ['ALGHORITHM'])
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
@@ -79,7 +79,3 @@ async def get_current_user(
         if scope not in token_data.scopes:
             raise credentials_exception(detail="Not enough permissions")
     return user
-
-
-
-

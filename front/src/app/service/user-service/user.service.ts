@@ -37,8 +37,6 @@ export class UserService {
   }
 
   getCurrentUser(url: string): Observable<UserSchema> {
-
-    // console.log(this.UsersLink + url)
     return this.http.get<UserSchema>(this.UsersLink + url)
   }
 
