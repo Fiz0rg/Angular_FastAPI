@@ -4,21 +4,17 @@ import datetime
 from typing import Union
 from jose import jwt, JWTError
 
-from fastapi_jwt_auth import AuthJWT
-
 from dotenv import load_dotenv
 from fastapi import Depends
 from fastapi.security import SecurityScopes, OAuth2PasswordBearer
 from passlib.context import CryptContext
 
-from pydantic import BaseModel, ValidationError
+from pydantic import ValidationError
 from db.user import Buyer
 from schemas.token import TokenData
 from .exeptions import exceptions
 
 load_dotenv('.env')
-
-ACCESS_TOKEN_EXPIRE_MINUNES = 30
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='user/token', scopes={"buyer": "just casual user"})
 
@@ -63,7 +59,7 @@ async def get_current_user(
         authenticate_value = f"Bearer"
     credentials_exception = exceptions(headers={"WWW-Authenticate": authenticate_value})
     try:
-        payload = jwt.decode(token, os.environ['SECRET_KEY'], algorithm=os.environ['ALGHORITHM'])
+        payload = jwt.decode(token, os.environ['SECRET_KEY'], algorithm=os.environ['ALGORITHM'])
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
