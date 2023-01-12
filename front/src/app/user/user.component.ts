@@ -22,6 +22,8 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers() 
+    console.log(this.users);
+    
   }
 
   userForm = this.form.group<UsernamePasswordUserSchema>({

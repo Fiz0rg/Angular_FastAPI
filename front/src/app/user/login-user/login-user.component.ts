@@ -29,19 +29,13 @@ export class LoginUserComponent implements OnInit {
 
   login(): void {
 
-    let formData = new FormData();
-    let formValue = this.form.value;
-
-    for (let key in formValue) {
-      formData.append(key, formValue[key])
-    };
-
-    formData.append('scope', 'buyer')
-
-    this.userService.login("/token", formData).subscribe((res: any) => {
+    this.userService.login("/token", this.form.value).subscribe((res: any) => {
       if(res.access_token){
         localStorage.setItem("access_token", res.access_token);
         localStorage.setItem("refresh_token", res.refresh_token);
+        localStorage.setItem("access_token_create_time", String(Date.now()));
+        console.log(localStorage.getItem("access_token"));
+        console.log(localStorage.getItem("refresh_token"));
         this.router.navigate(['/own_user'])
       }
     });

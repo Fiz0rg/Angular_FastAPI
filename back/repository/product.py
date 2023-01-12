@@ -3,6 +3,7 @@ from fastapi import HTTPException
 from db.category import Category
 from db.product import Product
 from db.basket import Basket
+from db.user import Buyer
 
 from schemas.product import ProductCreate
 
@@ -24,10 +25,12 @@ class ProductRepository:
         return await Product.objects.select_related("category").get(name=product_name)
 
 
-    async def add_product_in_basket(product_name: str, user_id: int):
+    async def add_product_in_basket(product_name: str, username: str):
+
+        user = await Buyer.objects.get(username=username)
 
         product = await Product.objects.get(name=product_name)
-        user_basket = await Basket.objects.get(user_id=user_id)
+        user_basket = await Basket.objects.get(user_id=user.id)
         await user_basket.products.add(product)
 
         product.purchases+=1

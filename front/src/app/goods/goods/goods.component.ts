@@ -23,6 +23,8 @@ export class GoodsComponent implements OnInit {
   ngOnInit(): void {
     this.getGoods()
     this.isAdminUser()
+    console.log(this.isAdminUser());
+    
   }
 
   getGoods(): void {
@@ -31,7 +33,7 @@ export class GoodsComponent implements OnInit {
 
   isAdminUser(): void {
     if(localStorage.getItem("access_token")){
-      this.userService.getCurrentUser("/users/me").subscribe(user => this.user = user.is_admin)
+      this.userService.getCurrentUser("/me").subscribe(user => this.user = user.is_admin)
     }
   }
 

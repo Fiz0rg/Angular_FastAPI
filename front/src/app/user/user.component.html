@@ -1,12 +1,3 @@
-<!-- <ul>
-    <li *ngFor="let user of users">
-        <button type="button" (click)="selectUser(user)" mat-button>
-            <span>{{user.id}}</span>
-            <span>{{user.username}}</span>
-        </button>
-    </li>
-</ul> -->
-
 <mat-list #shoes>
 
     <mat-list-item *ngFor="let user of users" (click)="selectUser(user)">

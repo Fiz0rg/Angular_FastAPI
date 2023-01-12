@@ -1,5 +1,6 @@
+from fastapi import Form
 from pydantic import BaseModel
 
 
 class CategoryName(BaseModel):
-    name: str
+    category_name: str = Form(...)

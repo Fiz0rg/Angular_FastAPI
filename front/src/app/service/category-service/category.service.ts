@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Category } from 'src/app/schemas/categories';
 
@@ -10,6 +10,11 @@ export class CategoryService {
 
   private baseCategoryUrl = 'http://127.0.0.1:8000/category';
 
+  private httpOptions = {headers: new HttpHeaders({
+    "accept": "application/json",
+    "Content-Type": "application/json"
+  })}
+
   constructor(
     private http: HttpClient,
   ) { }
@@ -18,7 +23,7 @@ export class CategoryService {
     return this.http.get<Category[]>(this.baseCategoryUrl + url)
   }
 
-  createCategory(url: string, object: object): Observable<Category>{
+  createCategory(url: string, object: object): Observable<Category>{    
     return this.http.post<Category>(this.baseCategoryUrl + url, object)
   }
 }

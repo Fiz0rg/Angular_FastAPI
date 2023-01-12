@@ -16,7 +16,7 @@ export class UserService {
 
   httpOptions = {
     headers: new HttpHeaders({
-      'accept': 'application/x-www-form-urlencoded',
+      'Accept': 'application/x-www-form-urlencoded',
     })
   };
 
@@ -32,8 +32,8 @@ export class UserService {
     return this.http.post<UsernamePasswordUserSchema>(this.UsersLink+url, user)
   }
 
-  login(url: string, login: FormData): Observable<UsernamePasswordUserSchema> {
-    return this.http.post<UsernamePasswordUserSchema>(this.UsersLink + url, login, this.httpOptions)
+  login(url: string, login: object): Observable<UsernamePasswordUserSchema> {    
+    return this.http.post<UsernamePasswordUserSchema>(this.UsersLink + url, login)
   }
 
   getCurrentUser(url: string): Observable<UserSchema> {

@@ -1,3 +1,4 @@
+from fastapi import Form
 from pydantic import BaseModel
 
 class UserName(BaseModel):
@@ -14,3 +15,12 @@ class UserCreate(UserName, PasswordUser):
 
 class Admin(UserCreate):
     is_admin: bool
+
+
+class UserForm(BaseModel):
+    username: str = Form(...)
+    password: str = Form(...)
+
+
+
+        

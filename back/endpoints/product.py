@@ -1,20 +1,17 @@
 from typing import List
 
-from fastapi import APIRouter, Security
+from fastapi import APIRouter, Depends
+from fastapi_jwt_auth import AuthJWT
 
 from repository.product import ProductRepository
-
-from db.user import Buyer
 from db.product import Product
-
-from security.user import get_current_user
 from schemas.product import ProductCreate
 
-router = APIRouter()
-
+router = APIRouter()    
 
 @router.post("/create_product", response_model=Product, response_model_exclude={"id", "baskets", "category__id"})
 async def create_product(product: ProductCreate):
+    
     return await ProductRepository.create_product(product)
 
 
@@ -24,8 +21,12 @@ async def get_all():
 
 
 @router.post("/add_product_in_basket")
-async def add_product_in_basket(product_name: str, current_user: Buyer = Security(get_current_user, scopes=["buyer"])):
-    await ProductRepository.add_product_in_basket(product_name=product_name, user_id=current_user.id)
+async def add_product_in_basket(product_name: str, Authorize: AuthJWT = Depends()):
+    Authorize.jwt_required()
+
+    username = Authorize.get_jwt_subject()
+
+    await ProductRepository.add_product_in_basket(product_name=product_name, username=username)
     return {"status_response": "200"}
 
 

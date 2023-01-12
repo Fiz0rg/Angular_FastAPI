@@ -1,24 +1,18 @@
-import os
-
 from typing import List
 from dotenv import load_dotenv
 
 from fastapi_jwt_auth import AuthJWT
-from fastapi import APIRouter, Depends, Form, HTTPException, Security
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends, HTTPException
 
 from repository.user import UserRepository
 from db.user import Buyer
-from schemas.user import Admin, UserCreate, UserName
+from schemas.user import Admin, UserCreate, UserName, UserForm
 from schemas.token import Token
-from security.user import authenticate_user, get_current_user
+from security.user import authenticate_user, Settings
 
 load_dotenv('.env')
 
 router = APIRouter()
-
-class Settings(BaseModel):
-    authjwt_secret_key: str = os.environ['SECRET_KEY']
 
 
 @AuthJWT.load_config
@@ -42,24 +36,24 @@ async def create_user(new_user: UserCreate):
 
 
 @router.post("/token", response_model=Token)
-async def login(username: str = Form(), password: str = Form(), Authorize: AuthJWT = Depends()):
-    user = await authenticate_user(username=username, password=password)
+async def login(user: UserForm, Authorize: AuthJWT = Depends()):
+    user = await authenticate_user(username=user.username, password=user.password)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
     
     access_token = Authorize.create_access_token(subject=user.username)
     refresh_token = Authorize.create_refresh_token(subject=user.username)
-
     return {"access_token": access_token, "refresh_token": refresh_token , "token_type": "bearer"}
 
 
 @router.get("/refresh_token", response_model=str)
-async def refresh_token(Authorize: AuthJWT = Depends(), current_user: Buyer = Security(get_current_user, scopes=["buyer"])):
+async def refresh_token(Authorize: AuthJWT = Depends()):
     try:
         Authorize.jwt_refresh_token_required()
     except:
         raise HTTPException("You have no refresh_token")
     
+    current_user = Authorize.get_jwt_subject()
     new_access_token = Authorize.create_access_token(subject=current_user.username)
     return {"access_token": new_access_token}
 
@@ -69,10 +63,11 @@ async def get_all():
     return await Buyer.objects.all()
     
 
-@router.get("/users/me/", response_model=Buyer, response_model_exclude={"id", "password"})
-async def read_users_me(current_user: Buyer = Security(get_current_user, scopes=["buyer"])):
-    return current_user
+@router.get('/me')
+async def protected(Authorize: AuthJWT = Depends()):
+    Authorize.jwt_required()
 
-
-
+    username = Authorize.get_jwt_subject()
+    user = await Buyer.objects.get(username=username)
+    return user
 

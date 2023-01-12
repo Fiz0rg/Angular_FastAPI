@@ -12,7 +12,7 @@ import { CategoryService } from 'src/app/service/category-service/category.servi
 export class CreateCategoryComponent implements OnInit {
 
   category = this.form.group({
-    name: ''
+    category_name: ''
   })
 
   constructor(
@@ -25,12 +25,14 @@ export class CreateCategoryComponent implements OnInit {
   }
 
   newCategory(): void {
-    const url_value = this.category.value.name
     const url = "/create_category"
 
-    console.log(url)
-    console.log(this.category.value.name)
+    const s = new FormData()
+    const a = this.category.value
+  
+    console.log(this.category.value);
 
+    
     this.categoryService.createCategory(url, this.category.value).subscribe(res => 
       this.router.navigate(['categories']))
   }

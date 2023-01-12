@@ -1,14 +1,12 @@
 from cloudipsp import Api, Checkout
-
 from typing import List
-from fastapi import APIRouter, Security
+
+from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
 
+from fastapi_jwt_auth import AuthJWT
+
 from db.product import Product
-from db.user import Buyer
-
-from security.user import get_current_user
-
 from repository.basket_repository import BasketRepository as basket_class
 
 
@@ -16,8 +14,12 @@ router = APIRouter()
 
 
 @router.get("/get_my_basket")
-async def get_my_basket(user_basket: Buyer = Security(get_current_user, scopes=['buyer'])):
-    return await basket_class.get_basket_goods(user_basket.id)
+async def get_my_basket(Authorize: AuthJWT = Depends()):
+
+    Authorize.jwt_required()
+    username = Authorize.get_jwt_subject()
+
+    return await basket_class.get_basket_goods(username)
 
 
 
