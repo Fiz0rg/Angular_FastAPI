@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { map } from 'rxjs';
 import { GoodsSchema } from '../schemas/goods';
 import { GetGoodsService } from '../service/goods-service/get-goods.service';
 

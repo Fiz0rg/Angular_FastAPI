@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { CategoryService } from 'src/app/service/category-service/category.service';
 import { Category } from 'src/app/schemas/categories';

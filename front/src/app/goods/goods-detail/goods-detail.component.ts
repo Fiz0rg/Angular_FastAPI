@@ -1,9 +1,6 @@
-import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, tap } from 'rxjs';
 import { GoodsSchema } from 'src/app/schemas/goods';
-import { BasketService } from 'src/app/service/basket/basket.service';
 import { GetGoodsService } from 'src/app/service/goods-service/get-goods.service';
 
 @Component({

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
 import { GoodsSchema } from 'src/app/schemas/goods';
-import { UserSchema } from 'src/app/schemas/user';
 import { GetGoodsService } from 'src/app/service/goods-service/get-goods.service';
 import { UserService } from 'src/app/service/user-service/user.service';
 
@@ -22,9 +21,7 @@ export class GoodsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getGoods()
-    this.isAdminUser()
-    console.log(this.isAdminUser());
-    
+    this.isAdminUser()    
   }
 
   getGoods(): void {

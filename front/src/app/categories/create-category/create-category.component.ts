@@ -24,16 +24,8 @@ export class CreateCategoryComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  newCategory(): void {
-    const url = "/create_category"
-
-    const s = new FormData()
-    const a = this.category.value
-  
-    console.log(this.category.value);
-
-    
-    this.categoryService.createCategory(url, this.category.value).subscribe(res => 
+  newCategory(): void {    
+    this.categoryService.createCategory("/create_category", this.category.value).subscribe(res => 
       this.router.navigate(['categories']))
   }
 

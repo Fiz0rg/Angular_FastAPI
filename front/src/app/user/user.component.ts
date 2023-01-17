@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 
 import { UserService } from 'src/app/service/user-service/user.service';
 
@@ -21,9 +21,7 @@ export class UserComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.getUsers() 
-    console.log(this.users);
-    
+    this.getUsers()    
   }
 
   userForm = this.form.group<UsernamePasswordUserSchema>({

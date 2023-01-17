@@ -19,11 +19,6 @@ export interface User extends UsernamePasswordUserSchema {
 };
 
 
-export interface Scope extends UsernamePasswordUserSchema {
-    scope: string
-};
-
-
 export interface UserId extends UserName {
     id: number
 };

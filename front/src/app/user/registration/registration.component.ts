@@ -17,7 +17,6 @@ export class RegistrationComponent implements OnInit {
               private router: Router,          
     ) { }
 
-  url = "/registration"
 
   userForm = this.formBuilder.group<UsernamePasswordUserSchema>({
     username: '',
@@ -28,7 +27,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   createUser(): void {
-    this.userService.createUser(this.url, this.userForm.value).subscribe( (res:any) =>
+    this.userService.createUser("/registration", this.userForm.value).subscribe( (res:any) =>
       this.router.navigate(['/login'])
     )
   }

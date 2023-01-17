@@ -33,9 +33,6 @@ export class LoginUserComponent implements OnInit {
       if(res.access_token){
         localStorage.setItem("access_token", res.access_token);
         localStorage.setItem("refresh_token", res.refresh_token);
-        localStorage.setItem("access_token_create_time", String(Date.now()));
-        console.log(localStorage.getItem("access_token"));
-        console.log(localStorage.getItem("refresh_token"));
         this.router.navigate(['/own_user'])
       }
     });

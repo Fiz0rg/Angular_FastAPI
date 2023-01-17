@@ -15,13 +15,14 @@ export class InterceptorService implements HttpInterceptor {
   ) { }
 
   protected AuthErrorHandler(error: HttpErrorResponse): Observable<any> | undefined{
-    if(error.status == 401 || error.status == 422) {
+    if(error.status == 401) {
+      this.router.navigate(['/login'])      
+      return ;}
+    
+    if(error.status == 422) {      
       if(localStorage.getItem("refresh_token")){
-        console.log(localStorage.getItem("refresh_token"));
-        console.log("HERE!");
         try{
           const a = this.http.post<string>("http://127.0.0.1:8000/user/refresh_token", localStorage.getItem("refresh_token")).subscribe()
-          console.log(a);
         } catch(error) {
           console.log("Error");
           
@@ -30,17 +31,17 @@ export class InterceptorService implements HttpInterceptor {
         return throwError(error);
       }
     }
+    else {
+      console.log("No");
+      
+    }
     return;
-  }
+  } 
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
-    // request = request.clone({setHeaders: {
-    //   "Accept": "application/x-www-form-urlencoded",
-    //   "Content-Type": "application/x-www-form-urlencoded"
-    // }})
 
 
     if(request.headers.has("Content-Type")) {

@@ -3,8 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { GetGoodsService } from 'src/app/service/goods-service/get-goods.service';
 import { GoodsSchema } from 'src/app/schemas/goods';
-import { filter, map } from 'rxjs';
-import { CategoryService } from 'src/app/service/category-service/category.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-sorted-category',
@@ -16,7 +15,6 @@ export class SortedCategoryComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private goodsService: GetGoodsService,
-    private categoryService: CategoryService,
     ) { }
 
   categoryName!: string;
@@ -34,8 +32,6 @@ export class SortedCategoryComponent implements OnInit {
 
 
   getGoodsByCategoryName(): void {
-    console.log(this.categoryName);
-    
     
     this.goodsService.getGoods("/get_all_products").pipe(
       map(dataArray => dataArray.filter(
