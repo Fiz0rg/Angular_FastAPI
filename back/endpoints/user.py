@@ -46,8 +46,9 @@ async def login(user: UserForm, Authorize: AuthJWT = Depends()):
     return {"access_token": access_token, "refresh_token": refresh_token , "token_type": "bearer"}
 
 
-@router.get("/refresh_token", response_model=str)
+@router.post("/refresh_token", response_model=str)
 async def refresh_token(Authorize: AuthJWT = Depends()):
+
     try:
         Authorize.jwt_refresh_token_required()
     except:

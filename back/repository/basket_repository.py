@@ -1,8 +1,3 @@
-from typing import List
-
-from schemas.product import ProductCreate
-
-from db.basket import Basket
 from db.product import Product
 from db.user import Buyer
 

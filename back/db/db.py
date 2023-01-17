@@ -1,7 +1,5 @@
-from dotenv import load_dotenv
 from sqlalchemy import create_engine, MetaData
 from databases import Database
-
 
 DATABASE_URL = "postgresql+psycopg2://postgres:123@localhost:5432/post"
 

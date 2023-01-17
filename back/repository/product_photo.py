@@ -1,6 +1,4 @@
 import os
-
-from unittest.mock import patch
 import aiofiles
 
 from fastapi import UploadFile, HTTPException

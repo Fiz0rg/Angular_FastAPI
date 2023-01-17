@@ -1,5 +1,4 @@
 from cloudipsp import Api, Checkout
-from typing import List
 
 from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
