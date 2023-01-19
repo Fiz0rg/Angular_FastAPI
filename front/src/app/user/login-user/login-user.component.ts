@@ -30,7 +30,7 @@ export class LoginUserComponent implements OnInit {
   login(): void {
 
     this.userService.login("/token", this.form.value).subscribe((res: any) => {
-      if(res.access_token){
+      if(res.access_token || res.refresh_token){
         localStorage.setItem("access_token", res.access_token);
         localStorage.setItem("refresh_token", res.refresh_token);
         this.router.navigate(['/own_user'])

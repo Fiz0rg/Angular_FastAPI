@@ -51,19 +51,18 @@ async def login(user: UserForm, Authorize: AuthJWT = Depends()):
     return {"access_token": access_token, "refresh_token": refresh_token , "token_type": "bearer"}
 
 
-@router.post("/refresh_token", response_model=str)
-async def refresh_token(
-    request: Request,
-    Authorize: AuthJWT = Depends()
-):
+@router.post("/refresh_token")
+async def refresh_token(Authorize: AuthJWT = Depends()):
 
-    request = request.headers['authorization']
+    try:
+        Authorize.jwt_refresh_token_required()
+    except:
+        raise HTTPException(status_code=422, detail="Some shit")
 
-    if Authorize:
-        Authorize.jwt_refresh_token_required(token=request)
+    expire_access_token_time = datetime.timedelta(seconds=5)
 
     current_user = Authorize.get_jwt_subject()
-    new_access_token = Authorize.create_access_token(subject=current_user.username)
+    new_access_token = Authorize.create_access_token(subject=current_user, expires_time=expire_access_token_time)
     return {"access_token": new_access_token}
 
 

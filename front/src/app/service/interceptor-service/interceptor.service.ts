@@ -16,20 +16,18 @@ export class InterceptorService implements HttpInterceptor {
 
   protected AuthErrorHandler(error: HttpErrorResponse): Observable<any> | undefined{
     if(error.status == 401) {
+      localStorage.removeItem("access_token")
       this.router.navigate(['/login'])      
       return ;}
     
     if(error.status == 422) { 
-      console.log(error.error);
-                 
+      localStorage.removeItem("access_token")
       if(localStorage.getItem("refresh_token") || !localStorage.getItem("access_token")){
         const httpOptions = {
-          headers: new HttpHeaders({"Authorization": `Bearer ${localStorage.getItem("refresh_token")}`})}
-        console.log(httpOptions);
-        
+          headers: new HttpHeaders({"Authorization": `Bearer ${localStorage.getItem("refresh_token")}`})}        
         try{
           const a = this.http.post<string>("http://127.0.0.1:8000/user/refresh_token", null, httpOptions).subscribe((res: any) => {
-            localStorage.setItem("refresh_token", res.refresh_token)
+            localStorage.setItem("access_token", res.access_token)
           })
         } catch(error) {
           console.log("Error");
