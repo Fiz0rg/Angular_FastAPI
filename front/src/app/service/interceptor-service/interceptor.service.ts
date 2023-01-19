@@ -19,10 +19,18 @@ export class InterceptorService implements HttpInterceptor {
       this.router.navigate(['/login'])      
       return ;}
     
-    if(error.status == 422) {      
-      if(localStorage.getItem("refresh_token")){
+    if(error.status == 422) { 
+      console.log(error.error);
+                 
+      if(localStorage.getItem("refresh_token") || !localStorage.getItem("access_token")){
+        const httpOptions = {
+          headers: new HttpHeaders({"Authorization": `Bearer ${localStorage.getItem("refresh_token")}`})}
+        console.log(httpOptions);
+        
         try{
-          const a = this.http.post<string>("http://127.0.0.1:8000/user/refresh_token", localStorage.getItem("refresh_token")).subscribe()
+          const a = this.http.post<string>("http://127.0.0.1:8000/user/refresh_token", null, httpOptions).subscribe((res: any) => {
+            localStorage.setItem("refresh_token", res.refresh_token)
+          })
         } catch(error) {
           console.log("Error");
           
@@ -43,12 +51,6 @@ export class InterceptorService implements HttpInterceptor {
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
 
-
-    if(request.headers.has("Content-Type")) {
-      request = request.clone({setHeaders: {
-        "Content-Type": "application/json"
-      }})
-    }
     if(localStorage.getItem("access_token")) {
       request = request.clone({ setHeaders: {
         "Authorization": `Bearer ${localStorage.getItem("access_token")}`

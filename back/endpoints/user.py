@@ -1,8 +1,9 @@
+import datetime
 from typing import List
 from dotenv import load_dotenv
 
 from fastapi_jwt_auth import AuthJWT
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header, Request
 
 from repository.user import UserRepository
 from db.user import Buyer
@@ -41,19 +42,26 @@ async def login(user: UserForm, Authorize: AuthJWT = Depends()):
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
     
-    access_token = Authorize.create_access_token(subject=user.username)
-    refresh_token = Authorize.create_refresh_token(subject=user.username)
+    exp_time_acc_token = datetime.timedelta(seconds=12)
+    exp_time_refresh_token = datetime.timedelta(minutes=28)
+
+
+    access_token = Authorize.create_access_token(subject=user.username, expires_time=exp_time_acc_token)
+    refresh_token = Authorize.create_refresh_token(subject=user.username, expires_time=exp_time_refresh_token)
     return {"access_token": access_token, "refresh_token": refresh_token , "token_type": "bearer"}
 
 
 @router.post("/refresh_token", response_model=str)
-async def refresh_token(Authorize: AuthJWT = Depends()):
+async def refresh_token(
+    request: Request,
+    Authorize: AuthJWT = Depends()
+):
 
-    try:
-        Authorize.jwt_refresh_token_required()
-    except:
-        raise HTTPException("You have no refresh_token")
-    
+    request = request.headers['authorization']
+
+    if Authorize:
+        Authorize.jwt_refresh_token_required(token=request)
+
     current_user = Authorize.get_jwt_subject()
     new_access_token = Authorize.create_access_token(subject=current_user.username)
     return {"access_token": new_access_token}

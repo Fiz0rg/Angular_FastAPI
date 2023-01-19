@@ -3,6 +3,8 @@ from typing import List
 from fastapi import APIRouter
 
 from db.category import Category
+from db.product import Product
+
 from schemas.category import CategoryName
 
 
@@ -24,4 +26,10 @@ async def get_all_categories():
 async def get_category_by_name(name: str):
     return await Category.objects.get(name=name)
 
+
+@router.get("/{category_name}")
+async def sorted_category(category_name: str):
+    category = await Category.objects.get(name=category_name)
+
+    return await Product.objects.filter(category__name=category.name).all()
     

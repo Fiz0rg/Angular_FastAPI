@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { GetGoodsService } from 'src/app/service/goods-service/get-goods.service';
 import { GoodsSchema } from 'src/app/schemas/goods';
-import { map } from 'rxjs';
+import { CategoryService } from 'src/app/service/category-service/category.service';
 
 @Component({
   selector: 'app-sorted-category',
@@ -14,7 +13,7 @@ export class SortedCategoryComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private goodsService: GetGoodsService,
+    private categoryService: CategoryService,
     ) { }
 
   categoryName!: string;
@@ -33,11 +32,7 @@ export class SortedCategoryComponent implements OnInit {
 
   getGoodsByCategoryName(): void {
     
-    this.goodsService.getGoods("/get_all_products").pipe(
-      map(dataArray => dataArray.filter(
-        dataObject => dataObject.category.name == this.categoryName
-      ))
-    ).subscribe(data => this.goodsByNameCategory = data)
+    this.categoryService.getGoodsByCategoryName(`/${this.categoryName}`).subscribe(data => this.goodsByNameCategory = data)
   }
 
 }
