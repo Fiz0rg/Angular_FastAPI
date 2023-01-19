@@ -1,5 +1,3 @@
-<h1>{{title}}</h1>
-
 <mat-toolbar>
     <nav>
         <ul class="main-nav">
@@ -11,6 +9,15 @@
             <li><a routerLink="/login"><button>Войти</button></a></li>
             <li><a routerLink="/test"><button>Тест</button></a></li>
             <li><a routerLink="/user_basket"><button>Корзина</button></a></li>
+
+            <div *ngIf="currentUser; else elseBlock">
+                <li><a routerLink="/own_user"><button>Кабинет</button></a></li>
+                <li><a routerLink="/logout"><button>Выйти</button></a></li>
+            </div>
+            <ng-template #elseBlock>
+                <li><a routerLink="/login"><button>Войти</button></a></li>
+            </ng-template>
+
         </ul>
     </nav>
 </mat-toolbar>

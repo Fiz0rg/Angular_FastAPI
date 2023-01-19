@@ -16,6 +16,7 @@ import { GoodsDetailComponent } from './goods/goods-detail/goods-detail.componen
 import { UserBasketComponent } from './basket/user-basket/user-basket.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { AuthGuardService } from './service/auth-guard/auth-guard.service';
+import { LogoutComponent } from './user/logout/logout.component';
 
 
 const routes: Routes = [
@@ -32,6 +33,7 @@ const routes: Routes = [
   {path: 'products/:productName', component: GoodsDetailComponent},
   {path: 'user_basket', component: UserBasketComponent},
   {path: 'home_page', component: HomePageComponent},
+  {path: 'logout', component: LogoutComponent}
 ]
 
 

@@ -34,6 +34,7 @@ import { SortedCategoryComponent } from './categories/sorted-category/sorted-cat
 import { GoodsDetailComponent } from './goods/goods-detail/goods-detail.component';
 import { UserBasketComponent } from './basket/user-basket/user-basket.component';
 import { HomePageComponent } from './home-page/home-page.component';
+import { LogoutComponent } from './user/logout/logout.component';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { HomePageComponent } from './home-page/home-page.component';
     GoodsDetailComponent,
     UserBasketComponent,
     HomePageComponent,
+    LogoutComponent,
   ],
   imports: [
     BrowserModule,
