@@ -4,3 +4,4 @@ class ProductCreate(BaseModel):
     name: str
     price: int
     category: int
+    amount: int

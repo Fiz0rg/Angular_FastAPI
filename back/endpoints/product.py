@@ -17,7 +17,7 @@ async def create_product(product: ProductCreate):
 
 @router.get("/get_all_products", response_model=List[Product], response_model_exclude={"id", "baskets", "category__id"})
 async def get_all():
-    return await Product.objects.select_related('category').all()
+    return await Product.objects.select_related('category').filter(amount__gt=0).all()
 
 
 @router.post("/add_product_in_basket")
@@ -25,6 +25,8 @@ async def add_product_in_basket(product_name: str, Authorize: AuthJWT = Depends(
     Authorize.jwt_required()
 
     username = Authorize.get_jwt_subject()
+
+
 
     await ProductRepository.add_product_in_basket(product_name=product_name, username=username)
     return {"status_response": "200"}

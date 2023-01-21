@@ -33,7 +33,12 @@ class ProductRepository:
         user_basket = await Basket.objects.get(user_id=user.id)
         await user_basket.products.add(product)
 
+        """ Increase purchases => we can traffic most popular goods"""
         product.purchases+=1
         await product.update(_columns=['purchases'])
 
+        
+
         return user_basket
+
+    
