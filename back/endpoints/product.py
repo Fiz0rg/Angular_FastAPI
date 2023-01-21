@@ -1,6 +1,7 @@
 from typing import List
 
 from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 from fastapi_jwt_auth import AuthJWT
 
 from repository.product import ProductRepository
@@ -26,8 +27,6 @@ async def add_product_in_basket(product_name: str, Authorize: AuthJWT = Depends(
 
     username = Authorize.get_jwt_subject()
 
-
-
     await ProductRepository.add_product_in_basket(product_name=product_name, username=username)
     return {"status_response": "200"}
 
@@ -39,5 +38,5 @@ async def get_ten_goods():
 
 
 @router.get("/{product_name}")
-async def test_def(product_name: str):
-    return await Product.objects.select_related('category').get(name=product_name)
+async def get_product_by_name(product_name: str):
+    return await Product.objects.select_related(['category']).get(name=product_name)

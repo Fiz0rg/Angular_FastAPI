@@ -37,7 +37,13 @@ class ProductRepository:
         product.purchases+=1
         await product.update(_columns=['purchases'])
 
-        
+        """ We check amount of product. And if amount > 5, price of this product is reduced by 10% """
+        product.amount -= 1
+        await product.update(_columns=['amount'])
+
+        if product.amount <= 5:
+            product.price *= 0.9
+            await product.update(_columns=['price'])
 
         return user_basket
 
