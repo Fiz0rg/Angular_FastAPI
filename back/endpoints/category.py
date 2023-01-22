@@ -1,9 +1,11 @@
-from typing import List
+from typing import Set
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from db.category import Category
 from db.product import Product
+
+from repository.category_repository import RepositoryClass
 
 from schemas.category import CategoryName
 
@@ -17,9 +19,9 @@ async def create_category(category_name: CategoryName):
     return new_category
 
 
-@router.get("/get_all", response_model=List[Category])
-async def get_all_categories():
-    return await Category.objects.all()
+@router.get("/get_all", response_model=Set[Category])
+async def get_all_categories(categories: Set[Category] = Depends(RepositoryClass.get_all_caregories)):
+    return categories
 
 
 @router.get("/one")
@@ -33,3 +35,7 @@ async def sorted_category(category_name: str):
 
     return await Product.objects.filter(category__name=category.name).all()
     
+
+@router.post("/dsad")
+async def test(test: str = Depends(RepositoryClass.test)):
+    return test

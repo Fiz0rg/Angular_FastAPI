@@ -1,5 +1,5 @@
 import datetime
-from typing import List
+from typing import List, Set
 from dotenv import load_dotenv
 
 from fastapi_jwt_auth import AuthJWT
@@ -22,12 +22,10 @@ def get_config():
 
 
 @router.post("/create_admin", response_model=Buyer)
-async def create_admin():
+async def create_admin(admin: Admin = Depends(UserRepository.create_admin)):
     """ Create default admin. """
 
-    admin = Admin(username="Admin", password='123', is_admin=True)
-    create_admin = await UserRepository.create(admin, Buyer)
-    return create_admin
+    return admin
 
 
 @router.post("/registration", response_model=UserName)
@@ -37,7 +35,8 @@ async def create_user(new_user: UserCreate):
 
 
 @router.post("/token", response_model=Token)
-async def login(user: UserForm, Authorize: AuthJWT = Depends()):
+async def login(
+    user: UserForm, Authorize: AuthJWT = Depends()):
     user = await authenticate_user(username=user.username, password=user.password)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
@@ -66,15 +65,11 @@ async def refresh_token(Authorize: AuthJWT = Depends()):
 
 
 @router.get("/get_all", response_model=List[UserCreate], response_model_exclude={"password"})
-async def get_all():
-    return await Buyer.objects.all()
+async def get_all(users: Set[UserCreate] = Depends(UserRepository.get_all_users)):
+
+    return users
     
 
-@router.get('/me')
-async def protected(Authorize: AuthJWT = Depends()):
-    Authorize.jwt_required()
-
-    username = Authorize.get_jwt_subject()
-    user = await Buyer.objects.get(username=username)
-    return user
-
+@router.get("/me")
+def get_user_by_jwt(username: str = Depends(UserRepository.get_username_by_jwt)):
+    return username

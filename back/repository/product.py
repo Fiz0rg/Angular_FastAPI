@@ -47,4 +47,15 @@ class ProductRepository:
 
         return user_basket
 
-    
+
+    async def get_all_products():
+        a = await Product.objects.select_related('category').filter(amount__gt=0).all()
+        return a
+
+        
+    async def ordered_products():
+        return await Product.objects.order_by("-purchases").all()
+
+
+    async def get_product_by_name(product_name):
+        return await Product.objects.select_related(['category']).get(name=product_name)
