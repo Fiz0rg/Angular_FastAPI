@@ -18,19 +18,16 @@ async def create_product(product: Product = Depends(ProductRepository.create_pro
 @router.get(
     "/get_all_products",
     response_model=List[Product],
-    response_model_exclude={"id", "baskets", "category__id"})
+    response_model_exclude={"id", "baskets", "category__id"}
+    )
 async def get_all(products: List[Product] = Depends(ProductRepository.get_all_products)):
     
     return products
 
 
 @router.post("/add_product_in_basket")
-async def add_product_in_basket(product_name: str, Authorize: AuthJWT = Depends()):
-    Authorize.jwt_required()
+async def add_product_in_basket(adding_product: dict = Depends(ProductRepository.add_product_in_basket)):
 
-    username = Authorize.get_jwt_subject()
-
-    await ProductRepository.add_product_in_basket(product_name=product_name, username=username)
     return {"status_response": "200"}
 
 

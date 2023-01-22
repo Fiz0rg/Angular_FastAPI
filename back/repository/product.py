@@ -1,4 +1,5 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, Depends
+from fastapi_jwt_auth import AuthJWT
 
 from db.category import Category
 from db.product import Product
@@ -25,7 +26,10 @@ class ProductRepository:
         return await Product.objects.select_related("category").get(name=product_name)
 
 
-    async def add_product_in_basket(product_name: str, username: str):
+    async def add_product_in_basket(product_name: str, Authorize: AuthJWT = Depends()):
+        Authorize.jwt_required()
+
+        username = Authorize.get_jwt_subject()
 
         user = await Buyer.objects.get(username=username)
 
