@@ -23,7 +23,7 @@ export class OwnUserComponent implements OnInit {
   }
 
   getUser(): void {
-    this.userService.getCurrentUser('/go').subscribe(data => this.user = data)
+    this.userService.getCurrentUser('/me').subscribe(data => this.user = data)
   }
   
   logout(): void {
