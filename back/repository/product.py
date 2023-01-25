@@ -10,6 +10,8 @@ from db.user import Buyer
 
 from schemas.product import ProductCreate
 
+from .auth_repository import check_access_token
+
 
 async def create_product(user_input: ProductCreate) -> Product:
     find_category = await Category.objects.get(id=user_input.category)
@@ -27,8 +29,7 @@ async def get_product_by_name(product_name: str) -> Product:
     return await Product.objects.select_related("category").get(name=product_name)
 
 
-async def add_product_in_basket(product_name: str, Authorize: AuthJWT = Depends()) -> List[Basket]:
-    Authorize.jwt_required()
+async def add_product_in_basket(product_name: str, Authorize: check_access_token = Depends()) -> Basket:
 
     username = Authorize.get_jwt_subject()
 

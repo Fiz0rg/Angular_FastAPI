@@ -20,13 +20,13 @@ router = APIRouter()
 async def create_admin(admin: Admin = Depends(UserRepository.create_admin)) -> Admin:
     """ Create default admin. """
 
-    return admin
+    return Admin.from_orm(admin)
 
 
 @router.post("/registration", response_model=Buyer)
 async def create_user(new_user: Buyer = Depends(UserRepository.registration)) -> Buyer:
 
-    return new_user
+    return Buyer.from_orm(new_user)
 
 
 @router.post("/token", response_model=Token)

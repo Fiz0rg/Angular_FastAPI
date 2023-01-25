@@ -1,14 +1,13 @@
-from typing import List
-
 from fastapi import Form
 from pydantic import BaseModel
 
-from db.category import Category
+from .base_schema import BaseSchemaModel
 
 
-class CategoryName(BaseModel):
+class FormCategoryName(BaseModel):
     category_name: str = Form(...)
 
 
-class ListCategories(BaseModel):
-    list_of_cat: List[Category] = []
+class CategoryName(BaseSchemaModel):
+    category_name: str 
+

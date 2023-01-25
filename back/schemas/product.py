@@ -1,31 +1,24 @@
-from typing import List
-
-from db.product import Product
-
 from pydantic import BaseModel
 
-class ProductCreate(BaseModel):
+from .base_schema import BaseSchemaModel
+
+
+class BaseProduct(BaseSchemaModel):
     name: str
     price: int
+    amount: int = None
+
+
+class ProductCreate(BaseProduct):
     category: int
-    amount: int
 
 
 class Category(BaseModel):
-    id: int
-    name: str
+    name: str = None
 
 
-class Products(BaseModel):
+class FullProductSchema(ProductCreate):
     id: int
-    name: str
-    price: int
-    amount: int
     category: Category
+
     
-
-
-
-
-class ListOfProducts(BaseModel):
-    list_of_products: List[Products] = []

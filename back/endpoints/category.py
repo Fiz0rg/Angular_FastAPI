@@ -13,8 +13,6 @@ from repository.category_repository import (
     sorted_products_by_category_name,
 )
 
-from repository.base_repository import check_access_token_exist
-
 from schemas.category import CategoryName
 
 
@@ -24,7 +22,7 @@ router = APIRouter()
 @router.post("/create_category", response_model=Category, response_model_exclude={"id"})
 async def create_category(new_category: CategoryName = Depends(create_category)) -> Category:
     
-    return await create_category(new_category=new_category)
+    return CategoryName.from_orm(new_category)
 
 
 @router.get("/get_all", response_model=List[Category])
