@@ -1,8 +1,10 @@
+from typing import List
+
 import datetime
 from fastapi import Depends, HTTPException
 from fastapi_jwt_auth import AuthJWT
 
-from schemas.user import Admin, UserCreate, UserForm
+from schemas.user import Admin, UserCreate, UserForm, UserName
 from schemas.token import Token
 
 from security.user import Settings, authenticate_user, hash_password
@@ -32,7 +34,7 @@ class UserRepository:
         return {"access_token": access_token, "refresh_token": refresh_token , "token_type": "bearer"}
     
 
-    async def create(new_user, db_model):
+    async def create(new_user, db_model) -> Buyer:
         """  When created user, will be create a basket for this new user with same id. """
 
         new_user.password = hash_password(new_user.password)
@@ -42,11 +44,11 @@ class UserRepository:
         return add
 
     
-    async def get_all_users():
+    async def get_all_users() -> List[Buyer]:
         return await Buyer.objects.all()
 
 
-    async def create_admin():
+    async def create_admin() -> Admin:
         
         admin = Admin(username="Admin", password='123', is_admin=True)
         create_admin = await UserRepository.create(admin, Buyer)
@@ -57,11 +59,11 @@ class UserRepository:
         return await UserRepository.create(new_user, Buyer)
 
 
-    async def checking(username: str):
+    async def checking(username: str) -> Buyer:
         return await Buyer.objects.get(username=username)
 
 
-    async def get_username_by_jwt(Authorize: AuthJWT = Depends()):
+    async def get_username_by_jwt(Authorize: AuthJWT = Depends()) -> Buyer:
         Authorize.jwt_required()
 
         username = Authorize.get_jwt_subject()
@@ -69,7 +71,7 @@ class UserRepository:
         return user
 
 
-    async def new_token(Authorize: AuthJWT = Depends()):
+    async def new_token(Authorize: AuthJWT = Depends()) -> str:
         
         try:
             Authorize.jwt_refresh_token_required()

@@ -1,7 +1,7 @@
-from typing import Set, List
+from typing import List
 
 from fastapi import APIRouter, Depends
-from fastapi.responses import JSONResponse
+from pydantic import parse_obj_as
 
 from db.category import Category
 from db.product import Product
@@ -9,35 +9,37 @@ from db.product import Product
 from repository.category_repository import (
     get_all_caregories,
     get_category_by_name, 
-    create_category_dependency,
+    create_category,
     sorted_products_by_category_name,
 )
 
-from schemas.category import CategoryName, ListCategories
+from repository.base_repository import check_access_token_exist
+
+from schemas.category import CategoryName
 
 
 router = APIRouter()
 
 
 @router.post("/create_category", response_model=Category, response_model_exclude={"id"})
-async def create_category(new_category: CategoryName = Depends(create_category_dependency)):
+async def create_category(new_category: CategoryName = Depends(create_category)) -> Category:
     
-    return Category(**new_category.dict())
+    return await create_category(new_category=new_category)
 
 
-@router.get("/get_all")
-async def get_all_categories(categories: Set[Category] = Depends(get_all_caregories)):
+@router.get("/get_all", response_model=List[Category])
+async def get_all_categories(categories: List[Category] = Depends(get_all_caregories)) -> List[Category]:
 
-    return ListCategories(list_of_cat=categories)
-
-
-@router.get("/one")
-async def get_category_by_name(category: Category = Depends(get_category_by_name)):
-
-    return Category(**category.dict())
+    return parse_obj_as(List[Category], categories)
 
 
-@router.get("/{category_name}")
-async def sorted_category(products: Set[Product] = Depends(sorted_products_by_category_name)):
+@router.get("/one", response_model=Category)
+async def get_category_by_name(category: Category = Depends(get_category_by_name)) -> Category:
 
-    return JSONResponse(content=products, status_code=200) 
+    return Category.from_orm(category)
+
+
+@router.get("/{category_name}", response_model=List[Product])
+async def sorted_category(products: List[Product] = Depends(sorted_products_by_category_name)) -> List[Product]:
+
+    return parse_obj_as(List[Product], products)
