@@ -1,24 +1,25 @@
+from typing import List
+
 from cloudipsp import Api, Checkout
 
 from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
 
-from fastapi_jwt_auth import AuthJWT
+from pydantic import parse_obj_as
+
 
 from db.product import Product
-from repository.basket_repository import BasketRepository as basket_class
+from repository.basket_repository import get_basket_goods
+from schemas.product import FullProductSchema
 
 
 router = APIRouter()
 
 
-@router.get("/get_my_basket")
-async def get_my_basket(Authorize: AuthJWT = Depends()):
+@router.get("/get_my_basket", response_model=List[FullProductSchema])
+async def get_my_basket(my_goods: List[FullProductSchema] = Depends(get_basket_goods)) -> List[FullProductSchema]:
 
-    Authorize.jwt_required()
-    username = Authorize.get_jwt_subject()
-
-    return await basket_class.get_basket_goods(username)
+    return parse_obj_as(List[FullProductSchema], my_goods)
 
 
 

@@ -1,11 +1,12 @@
 from fastapi import Form
-from pydantic import BaseModel
+from .base_schema import BaseSchemaModel
 
-class UserName(BaseModel):
+
+class UserName(BaseSchemaModel):
     username: str
 
 
-class PasswordUser(BaseModel):
+class PasswordUser(BaseSchemaModel):
     password: str
 
 
@@ -13,11 +14,11 @@ class UserCreate(UserName, PasswordUser):
     pass
 
 
-class Admin(UserCreate):
+class UserAdminSchema(UserCreate):
     is_admin: bool
 
 
-class UserForm(BaseModel):
+class UserForm(BaseSchemaModel):
     username: str = Form(...)
     password: str = Form(...)
 

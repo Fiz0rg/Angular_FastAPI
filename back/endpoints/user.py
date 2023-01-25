@@ -5,10 +5,17 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from pydantic import parse_obj_as
 
-from repository.user import UserRepository
-from db.user import Buyer
-from schemas.user import Admin, UserCreate, UserName
+from schemas.user import UserAdminSchema, UserCreate
 from schemas.token import Token
+
+from repository.user_repository import (
+    create_admin,
+    registration,
+    create_tokens,
+    new_token,
+    get_all_users,
+    get_user_by_name
+)
 
 
 load_dotenv('.env')
@@ -16,36 +23,36 @@ load_dotenv('.env')
 router = APIRouter()
 
 
-@router.post("/create_admin", response_model=Admin)
-async def create_admin(admin: Admin = Depends(UserRepository.create_admin)) -> Admin:
+@router.post("/create_admin", response_model=UserAdminSchema)
+async def create_admin(admin: UserAdminSchema = Depends(create_admin)) -> UserAdminSchema:
     """ Create default admin. """
 
-    return Admin.from_orm(admin)
+    return UserAdminSchema.from_orm(admin)
 
 
-@router.post("/registration", response_model=Buyer)
-async def create_user(new_user: Buyer = Depends(UserRepository.registration)) -> Buyer:
+@router.post("/registration", response_model=UserAdminSchema)
+async def create_user(new_user: UserAdminSchema = Depends(registration)) -> UserAdminSchema:
 
-    return Buyer.from_orm(new_user)
+    return UserAdminSchema.from_orm(new_user)
 
 
 @router.post("/token", response_model=Token)
-async def login(refresh_access_types_tokens: Token = Depends(UserRepository.create_tokens)) -> Token:
+async def login(refresh_access_types_tokens: Token = Depends(create_tokens)) -> Token:
 
     return Token.from_orm(refresh_access_types_tokens)
 
 
 @router.post("/refresh_token", response_model=Dict[str, str])
-async def refresh_token(new_access_token: str = Depends(UserRepository.new_token)) -> JSONResponse:
+async def refresh_token(new_access_token: str = Depends(new_token)) -> JSONResponse:
 
     return JSONResponse(content={"access_token": new_access_token})
 
 
 @router.get("/get_all", response_model=List[UserCreate], response_model_exclude={"password"})
-async def get_all(users: List[UserCreate] = Depends(UserRepository.get_all_users)) -> List[UserCreate]:
+async def get_all(users: List[UserCreate] = Depends(get_all_users)) -> List[UserCreate]:
     return parse_obj_as(List[UserCreate], users)
     
 
-@router.get("/me", response_model=str)
-def get_user_by_jwt(username: str = Depends(UserRepository.get_username_by_jwt)) -> str:
-    return UserName(username=username)
+@router.get("/me", response_model=UserAdminSchema)
+def get_user_by_jwt(user: UserAdminSchema = Depends(get_user_by_name)) -> UserAdminSchema:
+    return UserAdminSchema.from_orm(user)

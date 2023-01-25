@@ -1,7 +1,9 @@
-from pydantic import BaseModel
+from .base_schema import BaseSchemaModel
 
 
-class ProductInBasket(BaseModel):
-    name: str
+class BasketProduct(BaseSchemaModel):
+    name: str = None
     price: int
     category__name: str
+    amount: float = None
+    
