@@ -9,5 +9,8 @@ class FormCategoryName(BaseModel):
 
 
 class CategoryName(BaseSchemaModel):
-    category_name: str 
+    name: str 
 
+
+class FullCategorySchema(CategoryName):
+    id: int

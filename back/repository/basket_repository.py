@@ -1,12 +1,11 @@
 from typing import List
 
 from fastapi import Depends
-from pydantic import parse_obj_as
 
 from db.product import Product
 from db.user import Buyer
 
-from .user_repository import username_from_jwt
+from security.auth import username_from_jwt
 
 from schemas.product import FullProductSchema
 

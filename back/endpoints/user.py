@@ -11,10 +11,13 @@ from schemas.token import Token
 from repository.user_repository import (
     create_admin,
     registration,
-    create_tokens,
-    new_token,
     get_all_users,
     get_user_by_name
+)
+
+from security.auth import (
+    create_tokens,
+    new_token,
 )
 
 

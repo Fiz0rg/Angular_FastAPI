@@ -1,7 +1,6 @@
 from typing import List
 
 from fastapi import HTTPException, Depends
-from fastapi_jwt_auth import AuthJWT
 
 from db.category import Category
 from db.product import Product
@@ -10,7 +9,7 @@ from db.user import Buyer
 
 from schemas.product import ProductCreate
 
-from .auth_repository import check_access_token
+from security.auth import check_access_token
 
 
 async def create_product(user_input: ProductCreate) -> Product:
