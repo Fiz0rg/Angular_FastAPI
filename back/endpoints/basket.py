@@ -1,26 +1,27 @@
 from typing import List
+import json
 
 from cloudipsp import Api, Checkout
 
 from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
-
 from pydantic import parse_obj_as
+
+from repository.redis import redis_cache
 
 
 from db.product import Product
 from repository.basket_repository import get_basket_goods
-from schemas.product import FullProductSchema
+from schemas.product import FullProductSchema, BaseProduct
 
 
 router = APIRouter()
 
 
-@router.get("/get_my_basket", response_model=List[FullProductSchema])
-async def get_my_basket(my_goods: List[FullProductSchema] = Depends(get_basket_goods)) -> List[FullProductSchema]:
+@router.get("/get_my_basket", response_model=List[BaseProduct])
+async def get_my_basket(my_goods: List[BaseProduct] = Depends(get_basket_goods)) -> List[BaseProduct]:
 
-    return parse_obj_as(List[FullProductSchema], my_goods)
-
+    return parse_obj_as(List[BaseProduct], my_goods)
 
 
 @router.post("/purchase/{product_id}", response_class=RedirectResponse)

@@ -26,7 +26,7 @@ async def create_category(
     category_name: CategoryName,
     
     ) -> Category:
-    return await Category.objects.create(name=category_name.category_name)
+    return await Category.objects.create(name=category_name.name)
 
 
 async def get_category_by_name(category_name: str) -> Category:
