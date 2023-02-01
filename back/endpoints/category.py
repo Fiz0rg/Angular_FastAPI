@@ -1,5 +1,3 @@
-import aioredis
-
 from typing import List
 
 from fastapi import APIRouter, Depends
@@ -21,14 +19,6 @@ router = APIRouter()
 
 @router.post("/create_category", response_model=FullCategorySchema, response_model_exclude={"id"})
 async def create_category(new_category: FullCategorySchema = Depends(create_category)) -> FullCategorySchema:
-
-    a = aioredis.from_url(
-        "redis://localhost",
-        encoding="utf-8",
-        decode_responses=True)
-
-    async with a.client() as conn:
-        await conn.set(new_category.id, new_category.name)
 
     return FullCategorySchema.from_orm(new_category)
 

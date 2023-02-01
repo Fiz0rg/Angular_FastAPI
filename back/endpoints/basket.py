@@ -1,5 +1,4 @@
 from typing import List
-import json
 
 from cloudipsp import Api, Checkout
 
@@ -7,12 +6,9 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
 from pydantic import parse_obj_as
 
-from repository.redis import redis_cache
-
-
 from db.product import Product
 from repository.basket_repository import get_basket_goods
-from schemas.product import FullProductSchema, BaseProduct
+from schemas.product import BaseProduct
 
 
 router = APIRouter()
