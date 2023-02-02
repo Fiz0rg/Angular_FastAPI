@@ -1,65 +1,63 @@
 import json
 
-from typing import Optional, List
+from typing import Optional, List, Dict
+from aioredis import from_url
 
-from aioredis import Redis, create_redis_pool
 
-from schemas.product import BaseProduct
+class RebiuldedRedis:
 
-#Create a RedisCache instance
-class RedisCache:
-    
-    def __init__(self):
-        self.redis_cache: Optional[Redis] = None
+    _default_ex_time: Optional[int] = 604800
+
+    def __init__(
+        self,
+        expire_time: Optional[int] = None,
+        host: str = "redis://127.0.0.1",
+        port: int = 6379,
+        encoding: str = "utf-8"
+    ):
+        self.redis = from_url(f'{host}:{port}', encoding=encoding, decode_responses=True)
+        self._expire_time = expire_time or self._default_ex_time
+
+
+    @property
+    def expire_time(self):
+        return self._expire_time
+
+
+    async def get_redis_by_key(self, key: str) -> any:
+        response = await self.redis.get(key)
+
+        if not response:
+            return None
+
+        result = json.loads(response)
+        return result
+
+    async def set_redis(self, key: str, value: any, keepttl: Optional[bool] = False) -> Optional[bool]:
         
-    async def init_cache(self):
-        self.redis_cache = await create_redis_pool("redis://localhost:6379/0?encoding=utf-8") #Connecting to database
+        dumbs_value = json.dumps(value)
 
-    async def keys(self, pattern):
-        return await self.redis_cache.keys(pattern)
-
-    async def set(self, key, value):
-        return await self.redis_cache.set(key, value)
-
-    async def hset(self, key, field, value):
-        return await self.redis_cache.hset(key, field, value)
-    
-    async def get(self, key):
-        return await self.redis_cache.get(key)
-
-    async def lpush(self, key, value):
-        return await self.redis_cache.lpush(key, value)
-
-    async def lrange(self, username: str) -> List[BaseProduct]:
-        return await self.redis_cache.lrange(username, 0, -1)
-    
-    async def close(self):
-        self.redis_cache.close()
-        await self.redis_cache.wait_closed()
-
-
-redis_cache = RedisCache()
-
-
-async def add_products_in_redis(username_key: str, product_list: List[BaseProduct]) -> bool:
- 
-    for product in product_list:
+        request = await self.redis.set(
+            name=key,
+            value=dumbs_value,
+            ex=self.expire_time,
+            keepttl=keepttl
+        )
         
-        one = BaseProduct(**product.dict())
-        await redis_cache.lpush(username_key, one.json())
-
-    return 
+        return request
 
 
-async def convert_str_from_redis(username_key: str) -> List[BaseProduct]:
+    async def set_lpush_redis(self, key: str, list_of_values) -> Optional[bool]:
 
-    redis_string_response = await redis_cache.lrange(username_key)
-    result: List[BaseProduct] = []
+        result = [await self.redis.lpush(key, value.json()) for value in list_of_values]
+        return result
 
-    for product in redis_string_response:
-        parsed_produst = json.loads(product)
-        pydantic_product = BaseProduct(**parsed_produst)
-        result.append(pydantic_product)  
 
-    return result  
+
+
+
+redis_instanse = RebiuldedRedis()
+
+
+
 

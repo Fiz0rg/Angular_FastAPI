@@ -1,29 +1,18 @@
-from typing import List
-
 from fastapi import Depends
 
-from db.product import Product
 from db.user import Buyer
 
 from security.auth import username_from_jwt
 
-from schemas.product import BaseProduct
-
-from repository.redis import redis_cache, add_products_in_redis, convert_str_from_redis
+from .redis import redis_instanse
 
 
-async def get_basket_goods(username: str = Depends(username_from_jwt)) -> List[BaseProduct]:
+async def get_basket_goods(username: str = Depends(username_from_jwt)):
                 
     user = await Buyer.objects.get(username=username)
 
-    if await redis_cache.lrange(user.username):
-        return await convert_str_from_redis(user.username)
-    
-    else:
-        user_basket = await Product.objects.select_related(['baskets']).filter(
-        baskets__user_id=user.id
-    ).all()
+    return 
 
-        await add_products_in_redis(user.username, user_basket)
 
-    return await convert_str_from_redis(user.username)
+async def get_test():
+    return await redis_instanse.get_redis_by_key("a")

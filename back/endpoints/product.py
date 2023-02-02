@@ -15,7 +15,6 @@ from repository.product_repository import (
     get_product_by_name
 )
 
-from repository.redis import redis_cache
 from schemas.product import FullProductSchema
 
 router = APIRouter()    
@@ -54,24 +53,9 @@ async def add_product_in_basket() -> JSONResponse:
 @router.get("/get_ten_goods", response_model=List[FullProductSchema])
 async def get_ten_goods(products: List[FullProductSchema] = Depends(ordered_products)) -> List[FullProductSchema]:
     return parse_obj_as(List[FullProductSchema], products)
-
-
-@router.get("/WHAT")
-async def killme():
-
-    if await redis_cache.get("FallOutBoy"):
-        start_time = time.time()
-        a = await redis_cache.get("FallOutBoy")
-        return "if", time.time() - start_time
-    else:
-        print('else')
-        start_time = time.time()
-        a = await get_all_products()
-        return "else", time.time() - start_time
     
 
 @router.get("/{product_name}", response_model=FullProductSchema)
 async def get_product_by_name(one_product: FullProductSchema = Depends(get_product_by_name)) -> FullProductSchema:
 
-    await redis_cache.set(one_product.name, one_product.amount)
     return FullProductSchema.from_orm(one_product)

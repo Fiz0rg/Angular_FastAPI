@@ -5,7 +5,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi_jwt_auth .exceptions import AuthJWTException
 
-from repository.redis import redis_cache
 from db.db import database
 from endpoints import category, user, basket, product, product_photo
 
@@ -30,7 +29,7 @@ app.state.database = database
 @app.on_event("startup")
 async def startup() -> None:
     database_ = app.state.database
-    await redis_cache.init_cache()
+
     if not database_.is_connected:
         print("Connecting to database")
         await database_.connect()
@@ -39,7 +38,6 @@ async def startup() -> None:
 @app.on_event("shutdown")
 async def shutdown() -> None:
     database_ = app.state.database
-    await redis_cache.close()
 
     if database_.is_connected:
         print("Disconnecting from  database")
