@@ -31,7 +31,6 @@ async def get_product_by_name(product_name: str) -> Product:
 async def add_product_in_basket(product_name: str, Authorize: check_access_token = Depends()) -> Basket:
 
     username = Authorize.get_jwt_subject()
-
     user = await Buyer.objects.get(username=username)
 
     product = await Product.objects.get(name=product_name)
@@ -43,12 +42,13 @@ async def add_product_in_basket(product_name: str, Authorize: check_access_token
     await product.update(_columns=['purchases'])
 
     """ We check amount of product. And if amount > 5, price of this product is reduced by 10% """
-    product.amount -= 1
-    await product.update(_columns=['amount'])
+    if product.amount:
+        product.amount -= 1
+        await product.update(_columns=['amount'])
 
-    if product.amount <= 5:
-        product.price *= 0.9
-        await product.update(_columns=['price'])
+        if product.amount <= 5:
+            product.price *= 0.9
+            await product.update(_columns=['price'])
 
     return user_basket
 

@@ -3,6 +3,8 @@ import json
 from typing import Optional, List, Dict
 from aioredis import from_url
 
+from schemas.product import BaseProduct
+
 
 class RebiuldedRedis:
 
@@ -33,6 +35,7 @@ class RebiuldedRedis:
         result = json.loads(response)
         return result
 
+
     async def set_redis(self, key: str, value: any, keepttl: Optional[bool] = False) -> Optional[bool]:
         
         dumbs_value = json.dumps(value)
@@ -47,13 +50,39 @@ class RebiuldedRedis:
         return request
 
 
-    async def set_lpush_redis(self, key: str, list_of_values) -> Optional[bool]:
+    async def set_lpush_redis(self, list_of_values, username: str) -> Optional[bool]:
 
-        result = [await self.redis.lpush(key, value.json()) for value in list_of_values]
+        result = [await self.redis.lpush(username+str(value.id), value.json()) for value in list_of_values]
         return result
 
+    
+    async def get_keys(self, key):
+        return await self.redis.keys(key)
 
 
+    async def get_all_lrange(self, keys) -> List[BaseProduct]:
+        my_list = []
+        result = [my_list.append(await self.redis.lrange(key, 0, -1)) for key in keys]
+        return my_list
+
+
+    async def hset_redis(self, username: str, list_of_value: List[BaseProduct]):
+
+        for value in list_of_value:
+            key_value = f'{username+str(value["id"])}'
+            await self.redis.hset(username, key_value, json.dumps(value))
+
+
+    async def hgetall(self, key: str):
+        request = await self.redis.hgetall(key)
+        converted_result = [json.loads(request[value]) for value in request]
+        
+        return converted_result
+
+
+    async def exists_redis(self, key: str) -> bool:
+        res = await self.redis.exists(key)  
+        return bool(res)
 
 
 redis_instanse = RebiuldedRedis()

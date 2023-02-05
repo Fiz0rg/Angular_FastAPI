@@ -5,6 +5,8 @@ from cloudipsp import Api, Checkout
 from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
 
+from fastapi_jwt_auth import AuthJWT
+
 from db.product import Product
 
 from pydantic import parse_obj_as
@@ -13,16 +15,26 @@ from db.product import Product
 from repository.basket_repository import get_basket_goods, get_test
 from schemas.product import BaseProduct
 
-from repository.redis import redis_instanse
+from repository.redis import redis_instanse as redis
 
 
 router = APIRouter()
 
 
-@router.get("/get_my_basket", response_model=List[BaseProduct])
-async def get_my_basket(my_goods: List[BaseProduct] = Depends(get_basket_goods)) -> List[BaseProduct]:
+@router.get("/get_my_basket")
+async def get_my_basket(Authorize: AuthJWT = Depends()):
 
-    return parse_obj_as(List[BaseProduct], my_goods)
+    ex = await redis.exists_redis("Admin")
+    username = Authorize.get_jwt_subject()
+    username = "Admin"
+    if not ex:
+        list_of_products = await get_basket_goods(username)
+        await redis.hset_redis(username, list_of_products)
+        a = await redis.hgetall(username)
+        return a
+    else:
+        r = await redis.hgetall(username)
+        return r
 
 
 @router.post("/purchase/{product_id}", response_class=RedirectResponse)
@@ -48,11 +60,17 @@ async def fasasd():
 
 
 @router.get("/postreq")
-async def asdakdknsofn(name: str):
+async def asdakdknsofn(Authorize: AuthJWT = Depends()):
+
+    print('usernmae')
+
+    username = Authorize.get_jwt_subject()
 
     value = await Product.objects.all()
 
-    return await redis_instanse.set_lpush_redis(
-        key=name,
+    print(username)
+
+    return await redis.set_lpush_redis(
+        username=username,
         list_of_values=value
     )
