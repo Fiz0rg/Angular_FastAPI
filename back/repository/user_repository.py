@@ -55,5 +55,5 @@ async def get_username_by_jwt(Authorize: AuthJWT = Depends()) -> str:
 
 
 
-async def get_user_by_name(username: str = Depends(get_username_by_jwt)):
+async def get_user_by_name(username: str = Depends(get_username_by_jwt)) -> Buyer:
     return await Buyer.objects.get(username=username)

@@ -1,5 +1,3 @@
-import time
-
 from typing import List, Dict
 
 from pydantic import parse_obj_as

@@ -17,9 +17,6 @@ from repository.category_repository import (
 from schemas.product import FullProductSchema
 from schemas.category import FullCategorySchema
 
-from repository.redis import redis_instanse as redis
-from db.product import Product
-
 
 router = APIRouter()
 

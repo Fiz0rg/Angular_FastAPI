@@ -54,23 +54,3 @@ async def purchase(product_id: int):
     return url
 
 
-@router.get("/as")
-async def fasasd():
-    return await get_test()
-
-
-@router.get("/postreq")
-async def asdakdknsofn(Authorize: AuthJWT = Depends()):
-
-    print('usernmae')
-
-    username = Authorize.get_jwt_subject()
-
-    value = await Product.objects.all()
-
-    print(username)
-
-    return await redis.set_lpush_redis(
-        username=username,
-        list_of_values=value
-    )

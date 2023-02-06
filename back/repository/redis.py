@@ -1,6 +1,6 @@
 import json
 
-from typing import Optional, List, Dict
+from typing import Optional, List
 from aioredis import from_url
 
 from schemas.product import BaseProduct
