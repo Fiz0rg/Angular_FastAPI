@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List
 
 from cloudipsp import Api, Checkout
 
@@ -9,27 +9,25 @@ from fastapi_jwt_auth import AuthJWT
 
 from db.product import Product
 
-from pydantic import parse_obj_as
-
-from db.product import Product
-from repository.basket_repository import get_basket_goods, get_test
-from schemas.product import BaseProduct
-
+from repository.basket_repository import get_basket_goods
 from repository.redis import redis_instanse as redis
+
+from schemas.product import BaseProduct
 
 
 router = APIRouter()
 
 
-@router.get("/get_my_basket")
-async def get_my_basket(Authorize: AuthJWT = Depends()):
+@router.get("/get_my_basket", response_model=List[BaseProduct])
+async def get_my_basket(Authorize: AuthJWT = Depends()) -> List[BaseProduct]:
+
+    Authorize.jwt_required()
 
     username = Authorize.get_jwt_subject()
     exist_user = await redis.exists_redis(username)
 
     if not exist_user:
-        """ Adding goods to Redis """
-
+        """ Adding goods to Redis. """
 
         list_of_products = await get_basket_goods(username)
         await redis.hset_redis(username, list_of_products)

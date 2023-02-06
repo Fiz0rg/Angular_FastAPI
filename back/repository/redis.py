@@ -31,7 +31,6 @@ class RebiuldedRedis:
 
         if not response:
             return None
-
         result = json.loads(response)
         return result
 
@@ -39,19 +38,16 @@ class RebiuldedRedis:
     async def set_redis(self, key: str, value: any, keepttl: Optional[bool] = False) -> Optional[bool]:
         
         dumbs_value = json.dumps(value)
-
         request = await self.redis.set(
             name=key,
             value=dumbs_value,
             ex=self.expire_time,
             keepttl=keepttl
         )
-        
         return request
 
 
     async def set_lpush_redis(self, list_of_values, username: str) -> Optional[bool]:
-
         result = [await self.redis.lpush(username+str(value.id), value.json()) for value in list_of_values]
         return result
 
