@@ -24,18 +24,19 @@ router = APIRouter()
 @router.get("/get_my_basket")
 async def get_my_basket(Authorize: AuthJWT = Depends()):
 
-    ex = await redis.exists_redis("Admin")
     username = Authorize.get_jwt_subject()
-    username = "Admin"
-    if not ex:
+    exist_user = await redis.exists_redis(username)
+
+    if not exist_user:
+        """ Adding goods to Redis """
+
+
         list_of_products = await get_basket_goods(username)
         await redis.hset_redis(username, list_of_products)
-        a = await redis.hgetall(username)
-        return a
-    else:
-        r = await redis.hgetall(username)
-        return r
 
+    return await redis.hgetall(username) 
+
+        
 
 @router.post("/purchase/{product_id}", response_class=RedirectResponse)
 async def purchase(product_id: int):
