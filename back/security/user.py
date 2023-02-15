@@ -5,7 +5,7 @@ from passlib.context import CryptContext
 
 from pydantic import BaseModel
 
-from db.user import Buyer
+from ..db.user import Buyer
 
 load_dotenv('.env')
 
@@ -13,7 +13,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class Settings(BaseModel):
-    authjwt_secret_key: str = os.environ['SECRET_KEY']
+    authjwt_secret_key: str = "7f18111e48f8b0f243bc48a2faa87e17541ceea805f094f11e07db807fccf337"
 
 
 def hash_password(password: str):

@@ -5,8 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi_jwt_auth .exceptions import AuthJWTException
 
-from db.db import database
-from endpoints import category, user, basket, product, product_photo
+from .db.db import database
+from .endpoints import category, user, basket, product, product_photo
 
 app = FastAPI()
 

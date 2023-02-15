@@ -3,8 +3,8 @@ import datetime
 from fastapi_jwt_auth import AuthJWT
 from fastapi import Depends, HTTPException 
 
-from schemas.token import Token
-from schemas.user import UserForm
+from ..schemas.token import Token
+from ..schemas.user import UserForm
 
 from .user import authenticate_user
 

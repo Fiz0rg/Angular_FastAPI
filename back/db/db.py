@@ -1,8 +1,11 @@
+import dotenv
+
 from sqlalchemy import create_engine, MetaData
 from databases import Database
 
-DATABASE_URL = "postgresql+psycopg2://postgres:123@localhost:5432/post"
+dotenv.load_dotenv('.env')
 
+DATABASE_URL = "postgresql+psycopg2://postgres:123@habr:5432/postgres"
 
 database = Database(DATABASE_URL)
 

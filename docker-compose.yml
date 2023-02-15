@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+
+  fastapi:
+    build: .
+    command: uvicorn back.server:app --reload --host 127.0.0.1 --port 8000
+    ports:
+      - '8000:8000'
+    links:
+      - database
+    environment:
+      - POSTGRES_HOST=database
+      - POSTGRES_DB=post
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_PORT=5432
+    restart: always
+    networks:
+      - some_test_net
+    depends_on:
+      - database
+
+
+  database:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=post
+    ports:
+      - '5433:5432'
+    restart: always
+    networks:
+      - some_test_net
+
+
+networks:
+  some_test_net:

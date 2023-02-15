@@ -1,9 +1,8 @@
 import json
-
+import aioredis
 from typing import Optional, List
-from aioredis import from_url
 
-from schemas.product import BaseProduct
+from ..schemas.product import BaseProduct
 
 
 class RebiuldedRedis:
@@ -17,7 +16,7 @@ class RebiuldedRedis:
         port: int = 6379,
         encoding: str = "utf-8"
     ):
-        self.redis = from_url(f'{host}:{port}', encoding=encoding, decode_responses=True)
+        self.redis = aioredis.Redis.from_url(f'{host}:{port}', encoding=encoding, decode_responses=True)
         self._expire_time = expire_time or self._default_ex_time
 
 
@@ -57,8 +56,7 @@ class RebiuldedRedis:
 
 
     async def get_all_lrange(self, keys) -> List[BaseProduct]:
-        my_list = []
-        result = [my_list.append(await self.redis.lrange(key, 0, -1)) for key in keys]
+        my_list = [await self.redis.lrange(key, 0, -1) for key in keys]
         return my_list
 
 
@@ -69,7 +67,7 @@ class RebiuldedRedis:
             await self.redis.hset(username, key_value, json.dumps(value))
 
 
-    async def hgetall(self, key: str):
+    async def hgetall(self, key: str) -> List[any]:
         request = await self.redis.hgetall(key)
         converted_result = [json.loads(request[value]) for value in request]
         

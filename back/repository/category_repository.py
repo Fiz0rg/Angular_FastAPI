@@ -1,9 +1,9 @@
 from typing import List
 
-from db.category import Category
-from db.product import Product
+from ..db.category import Category
+from ..db.product import Product
 
-from schemas.category import CategoryName
+from ..schemas.category import CategoryName
 
 
 async def sorted_products_by_category_name(category_name: str) -> List[Product]:

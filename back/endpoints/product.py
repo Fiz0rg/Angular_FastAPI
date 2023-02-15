@@ -5,7 +5,7 @@ from pydantic import parse_obj_as
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
-from repository.product_repository import (
+from ..repository.product_repository import (
     create_product,
     get_all_products,
     add_product_in_basket,
@@ -13,7 +13,7 @@ from repository.product_repository import (
     get_product_by_name
 )
 
-from schemas.product import FullProductSchema
+from ..schemas.product import FullProductSchema
 
 router = APIRouter()    
 

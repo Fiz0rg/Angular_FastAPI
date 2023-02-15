@@ -1,8 +1,7 @@
 from typing import Optional
 from ormar import ForeignKey, String, Integer, Model
 
-from db.category import Category
-
+from .category import Category
 from .base_class import MetaClass
 
 class Product(Model):

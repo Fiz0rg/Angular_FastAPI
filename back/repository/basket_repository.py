@@ -1,11 +1,11 @@
 from typing import List
 
-from db.user import Buyer
-from db.product import Product  
+from ..db.user import Buyer
+from ..db.product import Product  
 
 from .redis import redis_instanse
 
-from schemas.product import BaseProduct
+from ..schemas.product import BaseProduct
 
 
 async def get_basket_goods(username: str) -> List[BaseProduct]:

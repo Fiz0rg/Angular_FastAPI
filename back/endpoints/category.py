@@ -2,20 +2,17 @@ from typing import List
 
 from fastapi import APIRouter, Depends
 
-from fastapi_jwt_auth import AuthJWT
-
 from pydantic import parse_obj_as
-from repository.basket_repository import get_basket_goods
 
-from repository.category_repository import (
+from ..repository.category_repository import (
     get_all_caregories,
     get_category_by_name, 
     create_category,
     sorted_products_by_category_name,
 )
 
-from schemas.product import FullProductSchema
-from schemas.category import FullCategorySchema
+from ..schemas.product import FullProductSchema
+from ..schemas.category import FullCategorySchema
 
 
 router = APIRouter()

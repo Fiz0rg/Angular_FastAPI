@@ -7,12 +7,12 @@ from fastapi.responses import RedirectResponse
 
 from fastapi_jwt_auth import AuthJWT
 
-from db.product import Product
+from ..db.product import Product
 
-from repository.basket_repository import get_basket_goods
-from repository.redis import redis_instanse as redis
+from ..repository.basket_repository import get_basket_goods
+from ..repository.redis import redis_instanse as redis
 
-from schemas.product import BaseProduct
+from ..schemas.product import BaseProduct
 
 
 router = APIRouter()
