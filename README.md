@@ -14,6 +14,6 @@ my_contacts = {
 
 Run commands:
 
-docker run -d --name aio --net work -p 6379:6379 redis
+docker run -d --name cache --net work -p 6379:6379 redis
 
 docker run --name database -p 5432:5432 -e POSTGRES_PASSWORD=123 --net work -d postgres
