@@ -53,3 +53,6 @@ async def purchase(product_id: int):
     return url
 
 
+@router.get("/redis")
+def test():
+    return redis.set_redis("key", "value")

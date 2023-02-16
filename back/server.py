@@ -58,4 +58,4 @@ app.include_router(basket.router, tags=["basket router"], prefix="/basket")
 app.include_router(product.router, tags=["product router"], prefix="/product")
 # app.include_router(product_photo.router, tags=["photo"], prefix="/photo")
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# app.mount("/static", StaticFiles(directory="static"), name="static")

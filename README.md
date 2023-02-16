@@ -10,3 +10,9 @@ my_contacts = {
     "gmail": roma77093@gmail.com,
     "instagram": https://instagram.com/gamlet_roman?igshid=YmMyMTA2M2Y=
 }
+
+
+Run commands:
+
+docker run -d --name aio --net work -p 6379:6379 redis
+docker run --name database -p 5432:5432 -e POSTGRES_PASSWORD=123 --net work -d postgres

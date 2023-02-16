@@ -1,5 +1,6 @@
 import json
-import aioredis
+from redis import Redis
+
 from typing import Optional, List
 
 from ..schemas.product import BaseProduct
@@ -12,11 +13,12 @@ class RebiuldedRedis:
     def __init__(
         self,
         expire_time: Optional[int] = None,
-        host: str = "redis://127.0.0.1",
+        host: str = "aio",
         port: int = 6379,
+        db: int = 0,
         encoding: str = "utf-8"
     ):
-        self.redis = aioredis.Redis.from_url(f'{host}:{port}', encoding=encoding, decode_responses=True)
+        self.redis = Redis(host=host, port=port, db=db)
         self._expire_time = expire_time or self._default_ex_time
 
 
@@ -34,14 +36,12 @@ class RebiuldedRedis:
         return result
 
 
-    async def set_redis(self, key: str, value: any, keepttl: Optional[bool] = False) -> Optional[bool]:
+    def set_redis(self, key: str, value: any, keepttl: Optional[bool] = False) -> Optional[bool]:
         
         dumbs_value = json.dumps(value)
-        request = await self.redis.set(
+        request = self.redis.set(
             name=key,
-            value=dumbs_value,
-            ex=self.expire_time,
-            keepttl=keepttl
+            value=dumbs_value
         )
         return request
 
