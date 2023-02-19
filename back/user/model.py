@@ -1,6 +1,6 @@
 from ormar import String, Integer, Model, Boolean
 
-from ..db import database, metadata_obj
+from db import database, metadata_obj
 
 class Buyer(Model):
     class Meta:

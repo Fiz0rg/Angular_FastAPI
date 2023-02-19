@@ -1,8 +1,8 @@
 from typing import List
 
-from .model import Category
-from ..product.model import Product
+from product.model import Product
 
+from .model import Category
 from .schemas import CategoryName
 
 

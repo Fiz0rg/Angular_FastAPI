@@ -7,12 +7,11 @@ from fastapi.responses import RedirectResponse
 
 from fastapi_jwt_auth import AuthJWT
 
-from ..product.model import Product
+from product.model import Product
+from cache_redis.repository import redis_instanse as redis
+from product.product_schemas import BaseProduct
 
 from .repository import get_basket_goods
-from ..redis.redis import redis_instanse as redis
-
-from ..product.product_schemas import BaseProduct
 
 
 router = APIRouter()
@@ -24,15 +23,15 @@ async def get_my_basket(Authorize: AuthJWT = Depends()) -> List[BaseProduct]:
     Authorize.jwt_required()
 
     username = Authorize.get_jwt_subject()
-    exist_user = await redis.exists_redis(username)
+    exist_user = redis.exists_redis(username)
 
     if not exist_user:
         """ Adding goods to Redis. """
 
         list_of_products = await get_basket_goods(username)
-        await redis.hset_redis(username, list_of_products)
+        redis.hset_redis(username, list_of_products)
 
-    return await redis.hgetall(username) 
+    return redis.hgetall(username) 
 
         
 

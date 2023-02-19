@@ -1,6 +1,6 @@
 from fastapi import Form
 
-from ..basket.schemas import BaseSchemaModel
+from basket.schemas import BaseSchemaModel
 
 
 class UserName(BaseSchemaModel):

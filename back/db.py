@@ -5,7 +5,7 @@ from databases import Database
 
 dotenv.load_dotenv('.env')
 
-DATABASE_URL = "postgresql+psycopg2://postgres:123@habr:5432/postgres"
+DATABASE_URL = "postgresql+psycopg2://postgres:123@localhost:5432/post"
 
 database = Database(DATABASE_URL)
 

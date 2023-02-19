@@ -1,6 +1,6 @@
 from ormar import Model, Integer, String
 
-from ..db import database, metadata_obj
+from db import database, metadata_obj
 
 
 class Category(Model):

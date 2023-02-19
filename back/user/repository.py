@@ -4,12 +4,10 @@ from fastapi import Depends
 from fastapi_jwt_auth import AuthJWT
 
 from .user_schemas import UserAdminSchema, UserCreate
-
 from .security import Settings, hash_password
-
-
-from ..basket.model import Basket
 from .model import Buyer
+
+from basket.model import Basket
 
 
 @AuthJWT.load_config

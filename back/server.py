@@ -5,16 +5,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi_jwt_auth .exceptions import AuthJWTException
 
-from .product_photo import endpoint
+# from .product_photo.endpoint import router as product_photo_router
+from basket.endpoint import router as basket_router
+from product_category.endpoint import router as category_router
+from user.endpoints import router as user_router
+from product.endpoint import router as product_router
 
-from .basket import endpoint
-
-from .product_category import endpoint
-
-from .product import endpoint
-
-from .db.db import database
-from .endpoints import user
+from db import database
 
 app = FastAPI()
 
@@ -60,10 +57,10 @@ def authjwt_exception_handler(request: Request, exc: AuthJWTException):
     )
         
 
-app.include_router(endpoint.router, tags=["category router"], prefix="/category")
-app.include_router(user.router, tags=["user router"], prefix="/user")
-app.include_router(endpoint.router, tags=["basket router"], prefix="/basket")
-app.include_router(endpoint.router, tags=["product router"], prefix="/product")
-# app.include_router(product_photo.router, tags=["photo"], prefix="/photo")
+app.include_router(category_router, tags=["category router"], prefix="/category")
+app.include_router(user_router, tags=["user router"], prefix="/user")
+app.include_router(basket_router, tags=["basket router"], prefix="/basket")
+app.include_router(product_router, tags=["product router"], prefix="/product")
+# app.include_router(product_photo_router, tags=["photo"], prefix="/photo")
 
 # app.mount("/static", StaticFiles(directory="static"), name="static")

@@ -1,11 +1,12 @@
 from typing import List
 
-from ..user.model import Buyer
-from ..product.model import Product  
+from user.model import Buyer
+from product.model import Product  
 
-from ..redis.redis import redis_instanse
+from cache_redis.repository import redis_instanse
 
-from ..product.product_schemas import BaseProduct
+
+from product.product_schemas import BaseProduct
 
 
 async def get_basket_goods(username: str) -> List[BaseProduct]:
@@ -17,6 +18,3 @@ async def get_basket_goods(username: str) -> List[BaseProduct]:
 
     return user_basket
 
-
-async def get_test():
-    return await redis_instanse.get_redis_by_key("a")

@@ -10,12 +10,20 @@ from .repository import (
     create_category,
     sorted_products_by_category_name,
 )
-
-from ..product.product_schemas import FullProductSchema
 from .schemas import FullCategorySchema
+
+from cache_redis.repository import redis_instanse
+from product.product_schemas import FullProductSchema
+
 
 
 router = APIRouter()
+
+
+@router.get('a_test')
+def redis_test():
+    return redis_instanse.set_redis("key", "value")
+
 
 
 @router.post("/create_category", response_model=FullCategorySchema, response_model_exclude={"id"})

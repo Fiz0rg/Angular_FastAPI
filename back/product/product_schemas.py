@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from ..basket.schemas import BaseSchemaModel
+from basket.schemas import BaseSchemaModel
 
 
 class BaseProduct(BaseSchemaModel):
