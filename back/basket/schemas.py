@@ -1,4 +1,4 @@
-from .base_schema import BaseSchemaModel
+from ..schemas.base_schema import BaseSchemaModel
 
 
 class BasketProduct(BaseSchemaModel):

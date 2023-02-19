@@ -1,7 +1,7 @@
 from typing import Optional
 from ormar import String, ForeignKey, Integer, Model
 
-from .base_class import MetaClass
+from ..db.base_class import MetaClass
 from ..product.model import Product
 
 class ProductPhoto(Model):
