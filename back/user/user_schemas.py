@@ -1,5 +1,10 @@
 from fastapi import Form
-from .base_schema import BaseSchemaModel
+from pydantic import BaseModel
+
+
+class BaseSchemaModel(BaseModel):
+    class Config:
+        orm_mode=True
 
 
 class UserName(BaseSchemaModel):

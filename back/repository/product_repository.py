@@ -5,11 +5,11 @@ from fastapi import HTTPException, Depends
 from ..db.category import Category
 from ..db.product import Product
 from ..db.basket import Basket
-from ..db.user import Buyer
+from ..user.model import Buyer
 
 from ..schemas.product import ProductCreate
 
-from ..security.auth import check_access_token
+from ..user.auth import check_access_token
 
 
 async def create_product(user_input: ProductCreate) -> Product:

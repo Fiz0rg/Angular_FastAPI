@@ -5,17 +5,17 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from pydantic import parse_obj_as
 
-from ..schemas.user import UserAdminSchema, UserCreate
-from ..schemas.token import Token
+from .user_schemas import UserAdminSchema, UserCreate
+from .token_schemas import Token
 
-from ..repository.user_repository import (
+from .repository import (
     create_admin,
     registration,
     get_all_users,
     get_user_by_name
 )
 
-from ..security.auth import (
+from .auth import (
     create_tokens,
     new_token,
 )

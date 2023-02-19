@@ -5,7 +5,7 @@ from passlib.context import CryptContext
 
 from pydantic import BaseModel
 
-from ..db.user import Buyer
+from .model import Buyer
 
 load_dotenv('.env')
 

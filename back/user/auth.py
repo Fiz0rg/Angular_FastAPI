@@ -3,10 +3,10 @@ import datetime
 from fastapi_jwt_auth import AuthJWT
 from fastapi import Depends, HTTPException 
 
-from ..schemas.token import Token
-from ..schemas.user import UserForm
+from .token_schemas import Token
+from .user_schemas import UserForm
 
-from .user import authenticate_user
+from .security import authenticate_user
 
 
 async def check_access_token(Authorize: AuthJWT = Depends()) -> AuthJWT:

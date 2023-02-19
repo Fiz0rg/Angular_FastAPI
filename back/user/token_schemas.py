@@ -1,11 +1,9 @@
 from typing import List
 
-from pydantic import BaseModel
-
-from .base_schema import BaseSchemaModel
+from .user_schemas import BaseSchemaModel
 
 
-class TokenData(BaseModel):
+class TokenData(BaseSchemaModel):
     username: str | None = None
     scopes: List[str] = []
 

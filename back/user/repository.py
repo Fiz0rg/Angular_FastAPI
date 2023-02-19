@@ -3,14 +3,14 @@ from typing import List
 from fastapi import Depends
 from fastapi_jwt_auth import AuthJWT
 
-from ..schemas.user import UserAdminSchema, UserCreate
+from .user_schemas import UserAdminSchema, UserCreate
 
-from ..security.user import Settings, hash_password
+from .security import Settings, hash_password
 
-from .base_repository import BaseRepository
+from ..repository.base_repository import BaseRepository
 
 from ..db.basket import Basket
-from ..db.user import Buyer
+from .model import Buyer
 
 
 @AuthJWT.load_config

@@ -1,6 +1,6 @@
 from typing import List
 
-from ..db.user import Buyer
+from ..user.model import Buyer
 from ..db.product import Product  
 
 from .redis import redis_instanse

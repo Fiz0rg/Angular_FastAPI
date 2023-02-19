@@ -2,7 +2,7 @@ from typing import Optional, List
 from ormar import ForeignKey, Model, Integer, ManyToMany
 
 from .product import Product
-from .user import Buyer
+from ..user.model import Buyer
 from .base_class import MetaClass
 
 
