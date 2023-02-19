@@ -9,7 +9,7 @@ from .security import Settings, hash_password
 
 from ..repository.base_repository import BaseRepository
 
-from ..db.basket import Basket
+from ..basket.model import Basket
 from .model import Buyer
 
 

@@ -12,7 +12,7 @@ from .repository import (
 )
 
 from ..product.product_schemas import FullProductSchema
-from ..schemas.schemas import FullCategorySchema
+from .schemas import FullCategorySchema
 
 
 router = APIRouter()

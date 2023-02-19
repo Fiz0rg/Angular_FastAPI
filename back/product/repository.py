@@ -4,7 +4,7 @@ from fastapi import HTTPException, Depends
 
 from ..product_category.model import Category
 from .model import Product
-from ..db.basket import Basket
+from ..basket.model import Basket
 from ..user.model import Buyer
 
 from .product_schemas import ProductCreate

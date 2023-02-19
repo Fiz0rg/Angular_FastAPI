@@ -9,7 +9,7 @@ from fastapi_jwt_auth import AuthJWT
 
 from ..product.model import Product
 
-from ..repository.basket_repository import get_basket_goods
+from .repository import get_basket_goods
 from ..repository.redis import redis_instanse as redis
 
 from ..product.product_schemas import BaseProduct

@@ -3,7 +3,7 @@ from ormar import ForeignKey, Model, Integer, ManyToMany
 
 from ..product.model import Product
 from ..user.model import Buyer
-from .base_class import MetaClass
+from ..db.base_class import MetaClass
 
 
 class Basket(Model):
