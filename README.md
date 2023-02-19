@@ -14,6 +14,8 @@ my_contacts = {
 
 Run commands:
 
+#command for creating redis image and will run it. Use for cache.
 docker run -d --name cache --net work -p 6379:6379 redis
 
+#command for creating relative database on postgresql with default username=postgres. 
 docker run --name database -p 5432:5432 -e POSTGRES_PASSWORD=123 --net work -d postgres
