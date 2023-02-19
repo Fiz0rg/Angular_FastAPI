@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 
 from pydantic import parse_obj_as
 
-from ..repository.category_repository import (
+from .repository import (
     get_all_caregories,
     get_category_by_name, 
     create_category,
@@ -12,7 +12,7 @@ from ..repository.category_repository import (
 )
 
 from ..product.product_schemas import FullProductSchema
-from ..schemas.category import FullCategorySchema
+from ..schemas.schemas import FullCategorySchema
 
 
 router = APIRouter()

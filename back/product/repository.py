@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import HTTPException, Depends
 
-from ..db.category import Category
+from ..product_category.model import Category
 from .model import Product
 from ..db.basket import Basket
 from ..user.model import Buyer
