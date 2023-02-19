@@ -1,11 +1,13 @@
 from ormar import Model, Integer, String
 
-from ..db.base_class import MetaClass
+from ..db import database, metadata_obj
 
 
 class Category(Model):
-    class Meta(MetaClass):
+    class Meta:
         tablename = "category"
+        database = database
+        metadata = metadata_obj
         
 
     id: int = Integer(primary_key=True)

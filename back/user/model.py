@@ -1,11 +1,12 @@
 from ormar import String, Integer, Model, Boolean
 
-from ..db.base_class import MetaClass
-
+from ..db import database, metadata_obj
 
 class Buyer(Model):
-    class Meta(MetaClass):
+    class Meta:
         tablename = "buyer"
+        database = database
+        metadata = metadata_obj
 
     id: int = Integer(primary_key=True)
     username: str = String(max_length=30, unique=True)

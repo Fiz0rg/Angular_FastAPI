@@ -7,7 +7,6 @@ from .user_schemas import UserAdminSchema, UserCreate
 
 from .security import Settings, hash_password
 
-from ..repository.base_repository import BaseRepository
 
 from ..basket.model import Basket
 from .model import Buyer
@@ -22,7 +21,7 @@ async def create_user(new_user, db_model) -> UserAdminSchema:
     """  When created user, will be create a basket for this new user with same id. """
 
     new_user.password = hash_password(new_user.password)
-    add = await BaseRepository.create_object(new_object=new_user, db_model=db_model)
+    add = await Buyer.objects.create(new_user)
     await Basket.objects.create(user_id=add)
 
     return add
@@ -33,7 +32,6 @@ async def get_all_users() -> List[UserAdminSchema]:
 
 
 async def create_admin() -> UserAdminSchema:
-        
     admin = UserAdminSchema(username="Admin", password='123', is_admin=True)
     create_admin = await create_user(admin, Buyer)
     return create_admin

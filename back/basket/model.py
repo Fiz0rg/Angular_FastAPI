@@ -3,12 +3,12 @@ from ormar import ForeignKey, Model, Integer, ManyToMany
 
 from ..product.model import Product
 from ..user.model import Buyer
-from ..db.base_class import MetaClass
-
+from ..db import database, metadata_obj
 
 class Basket(Model):
-    class Meta(MetaClass):
-        pass
+    class Meta:
+        database = database
+        metadata = metadata_obj
 
     id: int = Integer(primary_key=True)
     user_id: Optional[Buyer] = ForeignKey(Buyer, skip_reverse=True)

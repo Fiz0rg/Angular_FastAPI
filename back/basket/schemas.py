@@ -1,5 +1,9 @@
-from ..schemas.base_schema import BaseSchemaModel
+from pydantic import BaseModel
 
+
+class BaseSchemaModel(BaseModel):
+    class Config:
+        orm_mode=True
 
 class BasketProduct(BaseSchemaModel):
     name: str = None

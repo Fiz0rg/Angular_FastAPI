@@ -3,7 +3,7 @@ from typing import List
 from ..user.model import Buyer
 from ..product.model import Product  
 
-from ..repository.redis import redis_instanse
+from ..redis.redis import redis_instanse
 
 from ..product.product_schemas import BaseProduct
 

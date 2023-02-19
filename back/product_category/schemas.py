@@ -1,7 +1,7 @@
 from fastapi import Form
 from pydantic import BaseModel
 
-from ..schemas.base_schema import BaseSchemaModel
+from ..basket.schemas import BaseSchemaModel
 
 
 class FormCategoryName(BaseModel):
