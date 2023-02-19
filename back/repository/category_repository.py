@@ -1,7 +1,7 @@
 from typing import List
 
 from ..db.category import Category
-from ..db.product import Product
+from ..product.model import Product
 
 from ..schemas.category import CategoryName
 

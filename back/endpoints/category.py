@@ -11,7 +11,7 @@ from ..repository.category_repository import (
     sorted_products_by_category_name,
 )
 
-from ..schemas.product import FullProductSchema
+from ..product.product_schemas import FullProductSchema
 from ..schemas.category import FullCategorySchema
 
 

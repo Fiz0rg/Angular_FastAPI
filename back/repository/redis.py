@@ -3,7 +3,7 @@ from redis import Redis
 
 from typing import Optional, List
 
-from ..schemas.product import BaseProduct
+from ..product.product_schemas import BaseProduct
 
 
 class RebiuldedRedis:

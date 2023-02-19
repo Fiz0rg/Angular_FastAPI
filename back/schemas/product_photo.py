@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from ..db.product import Product
+from ..product.model import Product
 
 
 class ProductPhotoSchemas(BaseModel):

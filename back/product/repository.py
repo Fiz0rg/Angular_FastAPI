@@ -3,11 +3,11 @@ from typing import List
 from fastapi import HTTPException, Depends
 
 from ..db.category import Category
-from ..db.product import Product
+from .model import Product
 from ..db.basket import Basket
 from ..user.model import Buyer
 
-from ..schemas.product import ProductCreate
+from .product_schemas import ProductCreate
 
 from ..user.auth import check_access_token
 

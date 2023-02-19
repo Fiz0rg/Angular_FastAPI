@@ -5,8 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi_jwt_auth .exceptions import AuthJWTException
 
+from .product import endpoint
+
 from .db.db import database
-from .endpoints import category, user, basket, product, product_photo
+from .endpoints import category, user, basket, product_photo
 
 app = FastAPI()
 
@@ -55,7 +57,7 @@ def authjwt_exception_handler(request: Request, exc: AuthJWTException):
 app.include_router(category.router, tags=["category router"], prefix="/category")
 app.include_router(user.router, tags=["user router"], prefix="/user")
 app.include_router(basket.router, tags=["basket router"], prefix="/basket")
-app.include_router(product.router, tags=["product router"], prefix="/product")
+app.include_router(endpoint.router, tags=["product router"], prefix="/product")
 # app.include_router(product_photo.router, tags=["photo"], prefix="/photo")
 
 # app.mount("/static", StaticFiles(directory="static"), name="static")
