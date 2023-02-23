@@ -26,6 +26,14 @@ class MongoDB:
             result: MongoDBSchemas = MongoDBSchemas(**one_record)
             return result
 
+    
+    async def get_items(self):
+        result_list = []
+        async for item in self.collection.find({}):
+            result_list.append(MongoDBSchemas(**item))
+
+        return result_list
+
 
     async def insert_one(self ,object: dict) -> MongoDBSchemas:
 
@@ -33,6 +41,21 @@ class MongoDB:
         if action:
             one = await self.collection.find_one({ "_id": action.inserted_id})
             return MongoDBSchemas(**one)
+
+
+    async def insert_many(self, items: List[dict]):
+        inserting = await self.collection.insert_many(items)
+        
+        result = await self.get_items()
+
+        return result
     
+
+    async def delete_student(self, object_id: str) -> bool:
+        student = await self.collection.find_one({"_id": ObjectId(id)})
+        if student:
+            await self.collection.delete_one({"_id": ObjectId(id)})
+            return True
+
 
 mongo_instance = MongoDB()

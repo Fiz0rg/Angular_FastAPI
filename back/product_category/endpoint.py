@@ -23,9 +23,12 @@ router = APIRouter()
 
 @router.get("/aa_mongo")
 async def test_mongo():
-    fake_data = {"rap": "shit"}
+    fake_data = [
+        {"rap": "shit"},
+        {'rock': 'awesome'}
+    ]
 
-    mb = await mongo_instance.insert_one(fake_data)
+    mb = await mongo_instance.insert_many(fake_data)
 
     return mb
 
