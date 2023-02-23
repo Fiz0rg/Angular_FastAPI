@@ -14,10 +14,20 @@ from .schemas import FullCategorySchema
 
 from cache_redis.repository import redis_instanse
 from product.product_schemas import FullProductSchema
-
+from mongodb.settings import mongo_instance
 
 
 router = APIRouter()
+
+
+
+@router.get("/aa_mongo")
+async def test_mongo():
+    fake_data = {"rap": "shit"}
+
+    mb = await mongo_instance.insert_one(fake_data)
+
+    return mb
 
 
 @router.get('a_test')
