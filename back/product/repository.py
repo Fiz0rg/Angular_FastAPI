@@ -33,7 +33,15 @@ async def add_product_in_basket(product_name: str, Authorize: check_access_token
 
     product = await Product.objects.get(name=product_name)
     user_basket = await Basket.objects.get(user_id=user.id)
-    await user_basket.products.add(product)
+    all_products = await Product.objects.select_related(['baskets']).filter(
+        baskets__user_id=user.id
+            ).values()
+            
+    for item in all_products:
+        if product.name == item['name']:
+            print("Yest")
+            
+    # await user_basket.products.add(product)
 
     """ Increase purchases => we can traffic most popular goods"""
     product.purchases+=1

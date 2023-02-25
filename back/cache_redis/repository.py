@@ -59,10 +59,12 @@ class RebiuldedRedis:
 
 
     def hset_redis(self, username: str, list_of_value: List[BaseProduct]):
-
+        key_index = 0
+        
         for value in list_of_value:
-            key_value = f'{username+str(value["id"])}'
+            key_value = f'{username+str(key_index)}'
             self.redis.hset(username, key_value, json.dumps(value))
+            key_index += 1
 
 
     def hgetall(self, key: str) -> List[any]:
