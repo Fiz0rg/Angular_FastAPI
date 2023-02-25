@@ -13,13 +13,12 @@ from user.auth import check_access_token
 
 async def create_product(user_input: ProductCreate) -> Product:
     find_category = await Category.objects.get(id=user_input.category)
+
     if not find_category:
         raise HTTPException(status_code=404, detail="Category not found")
 
     await Product(**user_input.dict()).save()
-
     response_product = await Product.objects.select_related("category").get(name=user_input.name)
-
     return response_product
 
 

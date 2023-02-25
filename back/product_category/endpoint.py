@@ -4,25 +4,26 @@ from fastapi import APIRouter, Depends
 
 from pydantic import parse_obj_as
 
-from .repository import (
-    get_all_caregories,
-    get_category_by_name, 
-    create_category,
-    sorted_products_by_category_name,
-)
 from .schemas import FullCategorySchema
 
 from cache_redis.repository import redis_instanse
 from product.product_schemas import FullProductSchema
 from mongodb.settings import mongo_instance
 
+from .repository import (
+    get_all_caregories,
+    get_category_by_name, 
+    create_category,
+    sorted_products_by_category_name,
+)
+
 
 router = APIRouter()
 
 
-
 @router.get("/aa_mongo")
 async def test_mongo():
+
     fake_data = [
         {"rap": "shit"},
         {'rock': 'awesome'}

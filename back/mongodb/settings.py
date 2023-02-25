@@ -44,10 +44,9 @@ class MongoDB:
 
 
     async def insert_many(self, items: List[dict]):
-        inserting = await self.collection.insert_many(items)
         
+        await self.collection.insert_many(items)
         result = await self.get_items()
-
         return result
     
 

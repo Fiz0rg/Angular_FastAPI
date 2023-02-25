@@ -30,10 +30,8 @@ class RebiuldedRedis:
     def get_redis_by_key(self, key: str) -> any:
         response = self.redis.get(key)
 
-        if not response:
-            return None
-        result = json.loads(response)
-        return result
+        if response:
+            return json.loads(response)
 
 
     def set_redis(self, key: str, value: any, keepttl: Optional[bool] = False) -> Optional[bool]:

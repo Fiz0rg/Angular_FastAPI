@@ -27,9 +27,7 @@ def verify_password(planed_password: str, hash_password: str):
 
 async def authenticate_user(username: str, password: str):
     user = await Buyer.objects.get(username=username)
-    if not user:
-        return False
-    if not verify_password(password, user.password):
-        return False
+    if any([user, verify_password(password, user.password)]):
+        return user
     return user
 

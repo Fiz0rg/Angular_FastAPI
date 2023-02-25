@@ -16,5 +16,7 @@ async def get_basket_goods(username: str) -> List[BaseProduct]:
         baskets__user_id=user.id
             ).values()
 
+    print(user_basket)
+
     return user_basket
 
