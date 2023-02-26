@@ -29,7 +29,7 @@ class MongoDB:
             return result
 
     
-    async def get_items(self):
+    async def get_items(self) -> List[MongoDBSchemas]:
         result_list = []
         async for item in self.collection.find({}):
             result_list.append(MongoDBSchemas(**item))
@@ -45,7 +45,7 @@ class MongoDB:
             return MongoDBSchemas(**one)
 
 
-    async def insert_many(self, items: List[dict]):
+    async def insert_many(self, items: List[dict]) -> List[MongoDBSchemas]:
         
         await self.collection.insert_many(items)
         result = await self.get_items()
@@ -58,5 +58,3 @@ class MongoDB:
             await self.collection.delete_one({"_id": ObjectId(id)})
             return True
 
-
-mongo_instance = MongoDB()
