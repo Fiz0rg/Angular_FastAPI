@@ -10,13 +10,15 @@ class MongoDB:
     
     def __init__(
         self,
+        collection: str,
+        database: str = "rock",
         port: int = 27017,
-        host: str = "localhost"
+        host: str = "localhost",
         ):
 
         self.client = motor_asyncio.AsyncIOMotorClient(host, port)
-        self.database = self.client.rock
-        self.collection = self.database.get_collection("rock_playlist")
+        self.database = self.client[database]
+        self.collection = self.database[collection]
 
 
     async def find_one(self, object_id: str) -> MongoDBSchemas:

@@ -8,7 +8,7 @@ from .schemas import FullCategorySchema
 
 from cache_redis.repository import redis_instanse
 from product.product_schemas import FullProductSchema
-from mongodb.settings import mongo_instance
+from mongodb.settings import MongoDB
 
 from .repository import (
     get_all_caregories,
@@ -28,6 +28,7 @@ async def test_mongo():
         {"rap": "shit"},
         {'rock': 'awesome'}
     ]
+    mongo_instance = MongoDB(collection="rock_playlist")
 
     mb = await mongo_instance.insert_many(fake_data)
 
@@ -54,7 +55,6 @@ async def get_all_categories(categories: List[FullCategorySchema] = Depends(get_
 
 @router.get("/one", response_model=FullCategorySchema)
 async def get_category_by_name(category: FullCategorySchema = Depends(get_category_by_name)) -> FullCategorySchema:
-
     return FullCategorySchema.from_orm(category)
 
 
