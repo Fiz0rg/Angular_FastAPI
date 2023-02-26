@@ -9,7 +9,7 @@ from .schemas import CategoryName
 async def sorted_products_by_category_name(category_name: str) -> List[Product]:
 
     category = await Category.objects.get(name=category_name)
-    return await Product.objects.filter(category__id=category.id).all()
+    return await Product.objects.filter(category__id=category.id).filter(amount__gt=0).all()
 
 
 async def get_all_caregories() -> List[Category]:

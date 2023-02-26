@@ -1,6 +1,9 @@
+from http import HTTPStatus
 from typing import List
 
 from fastapi import HTTPException, Depends
+from fastapi.responses import JSONResponse
+from starlette.responses import Response 
 
 from .model import Product
 from .product_schemas import ProductCreate
@@ -23,8 +26,8 @@ async def create_product(user_input: ProductCreate) -> Product:
 
 
 async def get_product_by_name(product_name: str) -> Product:
-    return await Product.objects.select_related("category").get(name=product_name)
-
+    one = await Product.objects.select_related("category").get(name=product_name)
+    return one
 
 async def add_product_in_basket(product_name: str, Authorize: check_access_token = Depends()) -> Basket:
 
@@ -39,9 +42,9 @@ async def add_product_in_basket(product_name: str, Authorize: check_access_token
             
     for item in all_products:
         if product.name == item['name']:
-            print("Yest")
-            
-    # await user_basket.products.add(product)
+            return Response(status_code=304)
+
+    await user_basket.products.add(product)
 
     """ Increase purchases => we can traffic most popular goods"""
     product.purchases+=1
@@ -56,16 +59,14 @@ async def add_product_in_basket(product_name: str, Authorize: check_access_token
             product.price *= 0.9
             await product.update(_columns=['price'])
 
-    return user_basket
+    return Response(content="Product added in your basket", status_code=200)
 
 
 async def get_all_products() -> List[Product]:
-
     return await Product.objects.select_related('category').filter(amount__gt=0).all()
 
         
 async def ordered_products() -> List[Product]:
-    
     return await Product.objects.order_by("-purchases").all()
 
 

@@ -2,8 +2,12 @@
     <mat-list-item >{{productSchema.name}}</mat-list-item>
     <mat-list-item >{{productSchema.price}}</mat-list-item>
     <mat-list-item >{{productSchema.category.name}}</mat-list-item>
+    <mat-list-item > ещё в корзине{{productSchema.amount}}</mat-list-item>
 
-    <button (click)="addingInBasket(productSchema.name)">В корзину</button> 
+    <div *ngIf="is_authorized; else elseBlock">
+      <button (click)="addingInBasket(productSchema.name)">В корзину</button> 
+    </div>
+    <ng-template #elseBlock>Content to render when condition is false.</ng-template>
 
   </mat-list>
   

@@ -1,9 +1,9 @@
-from typing import List, Dict
+from typing import List, Dict, Any
 
 from pydantic import parse_obj_as
 
 from fastapi import APIRouter, Depends
-from fastapi.responses import JSONResponse
+from starlette.responses import Response
 
 from .product_schemas import FullProductSchema
 
@@ -37,13 +37,9 @@ async def get_all(products: List[FullProductSchema] = Depends(get_all_products))
     return parse_obj_as(List[FullProductSchema], products)
 
 
-@router.post(
-    "/add_product_in_basket",
-    response_model=Dict[str, str],
-    dependencies=[Depends(add_product_in_basket)]
-    )
-async def add_product_in_basket() -> JSONResponse:
-    return JSONResponse(content={"done": "Product has been added into our basket"}, status_code=200) 
+@router.post("/add_product_in_basket")
+async def add_product_in_basket(adding_response: Response = Depends(add_product_in_basket)) -> Response:
+    return adding_response
 
 
 @router.get("/get_ten_goods", response_model=List[FullProductSchema])
