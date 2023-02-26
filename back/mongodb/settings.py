@@ -23,17 +23,14 @@ class MongoDB:
 
     async def find_one(self, object_id: str) -> MongoDBSchemas:
 
-        one_record = await self.collection.find_one({ "_id": ObjectId(object_id)})
+        one_record: MongoDBSchemas = await self.collection.find_one({ "_id": ObjectId(object_id)})
         if one_record:
             result: MongoDBSchemas = MongoDBSchemas(**one_record)
             return result
 
     
     async def get_items(self) -> List[MongoDBSchemas]:
-        result_list = []
-        async for item in self.collection.find({}):
-            result_list.append(MongoDBSchemas(**item))
-
+        result_list: List[MongoDBSchemas] = [result_list.append(MongoDBSchemas(**item)) async for item in self.collection.find({})]
         return result_list
 
 
@@ -48,13 +45,13 @@ class MongoDB:
     async def insert_many(self, items: List[dict]) -> List[MongoDBSchemas]:
         
         await self.collection.insert_many(items)
-        result = await self.get_items()
+        result: List[MongoDBSchemas] = await self.get_items()
         return result
     
 
-    async def delete_student(self, object_id: str) -> bool:
-        student = await self.collection.find_one({"_id": ObjectId(id)})
-        if student:
+    async def delete_one(self, object_id: str) -> bool:
+        delete_item: MongoDBSchemas = await self.collection.find_one({"_id": ObjectId(id)})
+        if delete_item:
             await self.collection.delete_one({"_id": ObjectId(id)})
             return True
 

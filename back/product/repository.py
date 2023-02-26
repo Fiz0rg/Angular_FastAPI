@@ -1,8 +1,6 @@
-from http import HTTPStatus
 from typing import List
 
 from fastapi import HTTPException, Depends
-from fastapi.responses import JSONResponse
 from starlette.responses import Response 
 
 from .model import Product
@@ -15,28 +13,28 @@ from user.auth import check_access_token
 
 
 async def create_product(user_input: ProductCreate) -> Product:
-    find_category = await Category.objects.get(id=user_input.category)
+    find_category: Category = await Category.objects.get(id=user_input.category)
 
     if not find_category:
         raise HTTPException(status_code=404, detail="Category not found")
 
     await Product(**user_input.dict()).save()
-    response_product = await Product.objects.select_related("category").get(name=user_input.name)
+    response_product: Product = await Product.objects.select_related("category").get(name=user_input.name)
     return response_product
 
 
 async def get_product_by_name(product_name: str) -> Product:
-    one = await Product.objects.select_related("category").get(name=product_name)
-    return one
+    one_product: Product = await Product.objects.select_related("category").get(name=product_name)
+    return one_product
 
 async def add_product_in_basket(product_name: str, Authorize: check_access_token = Depends()) -> Basket:
 
-    username = Authorize.get_jwt_subject()
-    user = await Buyer.objects.get(username=username)
+    username: str = Authorize.get_jwt_subject()
+    user: Buyer = await Buyer.objects.get(username=username)
 
-    product = await Product.objects.get(name=product_name)
-    user_basket = await Basket.objects.get(user_id=user.id)
-    all_products = await Product.objects.select_related(['baskets']).filter(
+    product: Product = await Product.objects.get(name=product_name)
+    user_basket: Basket = await Basket.objects.get(user_id=user.id)
+    all_products: List[Basket] = await Product.objects.select_related(['baskets']).filter(
         baskets__user_id=user.id
             ).values()
             

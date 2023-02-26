@@ -46,7 +46,7 @@ async def checking(username: str) -> UserAdminSchema:
 async def get_username_by_jwt(Authorize: AuthJWT = Depends()) -> str:
     Authorize.jwt_required()
 
-    username = Authorize.get_jwt_subject()
+    username: str = Authorize.get_jwt_subject()
     return username
 
 

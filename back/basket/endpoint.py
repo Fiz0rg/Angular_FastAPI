@@ -22,25 +22,18 @@ async def get_my_basket(Authorize: AuthJWT = Depends()) -> List[BaseProduct]:
 
     Authorize.jwt_required()
 
-    username = Authorize.get_jwt_subject()
-    exist_user = redis.exists_redis(username)
-
+    username: str = Authorize.get_jwt_subject()
+    exist_user: bool = redis.exists_redis(username)
 
     if not exist_user:
         """ Adding goods to Redis. """
 
-        list_of_products = await get_basket_goods(username)
+        list_of_products: List[Product] = await get_basket_goods(username)
         redis.hset_redis(username, list_of_products)
 
-    nosql = redis.hgetall(username) 
-    sql = await get_basket_goods(username)
+    basket_products: List[BaseProduct] = redis.hgetall(username) 
 
-    # print(f'sssssssssssssssss{sql=}')
-    # print(f'oooooooooooooooo{nosql=}')
-
-
-
-    return nosql
+    return basket_products
 
         
 
