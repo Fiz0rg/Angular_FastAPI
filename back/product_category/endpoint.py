@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 
 from pydantic import parse_obj_as
 
@@ -28,10 +28,9 @@ async def test_mongo():
         {"rap": "shit"},
         {'rock': 'awesome'}
     ]
-    mongo_instance = MongoDB(collection="rock_playlist")
 
+    mongo_instance = MongoDB("rock_playlist")
     mb = await mongo_instance.insert_many(fake_data)
-
     return mb
 
 
@@ -48,13 +47,15 @@ async def create_category(new_category: FullCategorySchema = Depends(create_cate
 
 
 @router.get("/get_all", response_model=List[FullCategorySchema])
-async def get_all_categories(categories: List[FullCategorySchema] = Depends(get_all_caregories)) -> List[FullCategorySchema]:
+async def get_all_categories(request: Request, categories: List[FullCategorySchema] = Depends(get_all_caregories)) -> List[FullCategorySchema]:
 
     return parse_obj_as(List[FullCategorySchema], categories)
 
 
+
 @router.get("/one", response_model=FullCategorySchema)
 async def get_category_by_name(category: FullCategorySchema = Depends(get_category_by_name)) -> FullCategorySchema:
+    
     return FullCategorySchema.from_orm(category)
 
 

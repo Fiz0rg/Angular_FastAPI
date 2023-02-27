@@ -27,7 +27,8 @@ async def get_product_by_name(product_name: str) -> Product:
     one_product: Product = await Product.objects.select_related("category").get(name=product_name)
     return one_product
 
-async def add_product_in_basket(product_name: str, Authorize: check_access_token = Depends()) -> Basket:
+
+async def add_product_in_basket(product_name: str, Authorize: check_access_token = Depends()) -> Response:
 
     username: str = Authorize.get_jwt_subject()
     user: Buyer = await Buyer.objects.get(username=username)
