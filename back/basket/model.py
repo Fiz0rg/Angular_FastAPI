@@ -13,3 +13,7 @@ class Basket(Model):
     id: int = Integer(primary_key=True)
     user_id: Optional[Buyer] = ForeignKey(Buyer, skip_reverse=True)
     products: Optional[List[Product]] = ManyToMany(Product)
+
+
+
+    

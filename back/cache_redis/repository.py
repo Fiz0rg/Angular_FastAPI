@@ -1,7 +1,11 @@
 import json
+
+
 from redis import Redis
 
 from typing import Optional, List
+from product.model import Product
+from product.product_schemas import FullProductSchema
 
 from product.product_schemas import BaseProduct
 
@@ -58,20 +62,35 @@ class RebiuldedRedis:
         return my_list
 
 
-    def hset_redis(self, username: str, list_of_value: List[BaseProduct]):
-        key_index = 0
-        
-        for value in list_of_value:
-            key_value = f'{username+str(key_index)}'
-            self.redis.hset(username, key_value, json.dumps(value))
-            key_index += 1
+    def hmset_redis(self, items: dict[str, dict[str, str]]):
+        """
+        Pipiline alow us to add many items in a row and after this send request to Redis with all items.
+        Without it we'll just make many-many request by one item.
+        """
+        with self.redis.pipeline() as pipe:
+            for key, value in items.items():
+                pipe.hmset(key,value)
+            pipe.execute()
 
 
-    def hgetall(self, key: str) -> List[any]:
-        request = self.redis.hgetall(key)
-        converted_result = [json.loads(request[value]) for value in request]
-        
-        return converted_result
+    def hgetall(self, key_prefix: str) -> List[any]:
+        """ 
+        I don't know how to format fetched values from redis from bytes to native types. 
+        So I just came up with this way. 
+        """
+
+        all_user_keys = self.redis.keys(key_prefix + "*")
+        my_list = []
+        for i in all_user_keys:
+            item = self.redis.hgetall(i)
+
+            for key, value in item.items():
+                item.pop(key, None)
+                item[key.decode('utf-8')] = value.decode('utf-8')
+
+            my_list.append(BaseProduct(**item))
+                    
+        return my_list
 
 
     def exists_redis(self, key: str) -> bool:

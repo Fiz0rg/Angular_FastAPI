@@ -11,7 +11,7 @@ from product.model import Product
 from cache_redis.repository import redis_instanse as redis
 from product.product_schemas import BaseProduct
 
-from .repository import get_basket_goods
+from .repository import get_basket_goods, dict_for_redis
 
 
 router = APIRouter()
@@ -25,11 +25,14 @@ async def get_my_basket(Authorize: AuthJWT = Depends()) -> List[BaseProduct]:
     username: str = Authorize.get_jwt_subject()
     exist_user: bool = redis.exists_redis(username)
 
+    key_prefix: str = f'{username}_basket_'    
+
     if not exist_user:
         """ Adding goods to Redis. """
 
         list_of_products: List[Product] = await get_basket_goods(username)
-        redis.hset_redis(username, list_of_products)
+        list_to_dict = await dict_for_redis(key_prefix, list_of_products)
+        redis.new_hmset_redis(list_to_dict)
 
     basket_products: List[BaseProduct] = redis.hgetall(username) 
 

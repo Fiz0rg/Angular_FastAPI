@@ -26,6 +26,8 @@ load_dotenv('.env')
 router = APIRouter()
 
 
+
+
 @router.post("/create_admin", response_model=UserAdminSchema)
 async def create_admin(admin: UserAdminSchema = Depends(create_admin)) -> UserAdminSchema:
     """ Create default admin. """

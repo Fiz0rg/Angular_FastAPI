@@ -1,6 +1,7 @@
 from typing import List
 
 from fastapi import HTTPException, Depends
+from fastapi.responses import JSONResponse
 from starlette.responses import Response 
 
 from .model import Product
@@ -41,8 +42,8 @@ async def add_product_in_basket(product_name: str, Authorize: check_access_token
             
     for item in all_products:
         if product.name == item['name']:
-            return Response(status_code=304)
-
+            raise HTTPException(status_code=304)
+        
     await user_basket.products.add(product)
 
     """ Increase purchases => we can traffic most popular goods"""
@@ -58,7 +59,7 @@ async def add_product_in_basket(product_name: str, Authorize: check_access_token
             product.price *= 0.9
             await product.update(_columns=['price'])
 
-    return Response(content="Product added in your basket", status_code=200)
+    return JSONResponse(status_code=200, content="Ok")
 
 
 async def get_all_products() -> List[Product]:

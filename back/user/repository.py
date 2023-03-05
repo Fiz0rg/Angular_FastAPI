@@ -15,11 +15,11 @@ def get_config():
     return Settings()
 
 
-async def create_user(new_user, db_model) -> UserAdminSchema:
+async def create_user(new_user: UserAdminSchema) -> UserAdminSchema:
     """  When created user, will be create a basket for this new user with same id. """
 
     new_user.password = hash_password(new_user.password)
-    add = await Buyer.objects.create(new_user)
+    add = await Buyer.objects.create(**new_user.dict())
     await Basket.objects.create(user_id=add)
 
     return add
@@ -30,8 +30,8 @@ async def get_all_users() -> List[UserAdminSchema]:
 
 
 async def create_admin() -> UserAdminSchema:
-    admin = UserAdminSchema(username="Admin", password='123', is_admin=True)
-    create_admin = await create_user(admin, Buyer)
+    admin_info = UserAdminSchema(username="Admin", password='123', is_admin=True)
+    create_admin = await create_user(admin_info)
     return create_admin
 
     

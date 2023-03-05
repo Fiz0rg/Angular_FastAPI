@@ -3,6 +3,8 @@ from typing import List, Dict, Any
 from pydantic import parse_obj_as
 
 from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
+
 from starlette.responses import Response
 
 from .product_schemas import FullProductSchema
@@ -38,7 +40,7 @@ async def get_all(products: List[FullProductSchema] = Depends(get_all_products))
 
 
 @router.post("/add_product_in_basket")
-async def add_product_in_basket(adding_response: Response = Depends(add_product_in_basket)) -> Response:
+async def add_product_in_basket(adding_response: Response = Depends(add_product_in_basket)) -> JSONResponse:
     return adding_response
 
 
