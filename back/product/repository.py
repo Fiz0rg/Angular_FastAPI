@@ -26,6 +26,8 @@ async def create_product(user_input: ProductCreate) -> Product:
 
 async def get_product_by_name(product_name: str) -> Product:
     one_product: Product = await Product.objects.select_related("category").get(name=product_name)
+    if not one_product:
+        raise HTTPException(status_code=404, detail="Not found this product")
     return one_product
 
 
@@ -36,6 +38,11 @@ async def add_product_in_basket(product_name: str, Authorize: check_access_token
 
     product: Product = await Product.objects.get(name=product_name)
     user_basket: Basket = await Basket.objects.get(user_id=user.id)
+
+    """
+    Check if product already in basket
+    """
+
     all_products: List[Basket] = await Product.objects.select_related(['baskets']).filter(
         baskets__user_id=user.id
             ).values()
@@ -63,7 +70,10 @@ async def add_product_in_basket(product_name: str, Authorize: check_access_token
 
 
 async def get_all_products() -> List[Product]:
-    return await Product.objects.select_related('category').filter(amount__gt=0).all()
+    products = await Product.objects.select_related('category').filter(amount__gt=0).all()
+    if not products:
+        raise HTTPException(status_code=404, detail="Not found any products")
+    return products
 
         
 async def ordered_products() -> List[Product]:

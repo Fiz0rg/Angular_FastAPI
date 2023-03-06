@@ -1,6 +1,7 @@
 from typing import List
 
 from bson import ObjectId
+from fastapi import HTTPException
 from motor import motor_asyncio
 
 from .schemas import MongoDBSchemas
@@ -21,19 +22,24 @@ class MongoDB:
         self.database = self.client[database_string]
         self.collection = self.database[collection_string]
 
+
     def __repr__(self):
         return repr(f'Custom MongoDB object with {self.collection_string} collection and {self.database_string} database')
 
 
     async def find_one(self, object_id: str) -> MongoDBSchemas:
         one_record: MongoDBSchemas = await self.collection.find_one({ "_id": ObjectId(object_id)})
-        if one_record:
-            result: MongoDBSchemas = MongoDBSchemas(**one_record)
-            return result
+        if not one_record:
+            raise HTTPException(status_code=404, detail="Not found this item")
+            
+        result: MongoDBSchemas = MongoDBSchemas(**one_record)
+        return result
 
     
     async def get_items(self) -> List[MongoDBSchemas]:
         result_list: List[MongoDBSchemas] = [MongoDBSchemas(**item) async for item in self.collection.find({})]
+        if not result_list:
+            raise HTTPException(status_code=404, detail="Not found these items")
         return result_list
 
 
@@ -55,4 +61,6 @@ class MongoDB:
         if delete_item:
             await self.collection.delete_one({"_id": ObjectId(id)})
             return True
+        else: 
+            raise HTTPException(status_code=304)
 

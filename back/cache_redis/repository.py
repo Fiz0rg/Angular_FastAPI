@@ -1,11 +1,9 @@
 import json
-
+from fastapi import HTTPException
 
 from redis import Redis
 
 from typing import Optional, List
-from product.model import Product
-from product.product_schemas import FullProductSchema
 
 from product.product_schemas import BaseProduct
 
@@ -22,6 +20,7 @@ class RebiuldedRedis:
         db: int = 0,
         encoding: str = "utf-8"
     ):
+        self.encoding = encoding
         self.redis = Redis(host=host, port=port)
         self._expire_time = expire_time or self._default_ex_time
 
@@ -34,8 +33,10 @@ class RebiuldedRedis:
     def get_redis_by_key(self, key: str) -> any:
         response = self.redis.get(key)
 
-        if response:
-            return json.loads(response)
+        if not response:
+            raise HTTPException(status_code=404, detail="Not found")
+
+        return json.loads(response)
 
 
     def set_redis(self, key: str, value: any, keepttl: Optional[bool] = False) -> Optional[bool]:
@@ -54,11 +55,19 @@ class RebiuldedRedis:
 
     
     def get_keys(self, key):
-        return self.redis.keys(key)
+
+        if key:
+            return self.redis.keys(key)
+        else:
+            return self.redis.keys("*")
 
 
     def get_all_lrange(self, keys) -> List[BaseProduct]:
         my_list = [self.redis.lrange(key, 0, -1) for key in keys]
+
+        if not my_list:
+            raise HTTPException(status_code=404, detail="There is not any values")
+
         return my_list
 
 
@@ -86,7 +95,7 @@ class RebiuldedRedis:
 
             for key, value in item.items():
                 item.pop(key, None)
-                item[key.decode('utf-8')] = value.decode('utf-8')
+                item[key.decode(self.encoding)] = value.decode(self.encoding)
 
             my_list.append(BaseProduct(**item))
                     
