@@ -1,4 +1,6 @@
 import json
+import datetime
+
 from fastapi import HTTPException
 
 from redis import Redis
@@ -27,7 +29,7 @@ class RebiuldedRedis:
 
     @property
     def expire_time(self):
-        return self._expire_time
+        return self._expire_time        
 
 
     def get_redis_by_key(self, key: str) -> any:
@@ -36,7 +38,31 @@ class RebiuldedRedis:
         if not response:
             raise HTTPException(status_code=404, detail="Not found")
 
-        return json.loads(response)
+        return response.decode("utf-8")
+
+
+    def checking_ips_addresses(self, host: str) -> bool:
+
+        current_minute = datetime.datetime.now().minute
+        user_key: str = f'{host}:{current_minute}'
+        check_banned_hosts = self.redis.sismember("banned", user_key)
+
+        if check_banned_hosts:
+            raise HTTPException(status_code=403, detail="YOU ARE BANNED, SKAMER!")
+        
+        exist_host: bytes = self.redis.get(user_key)
+
+        if not exist_host:
+            _ = self.redis.set(user_key, 0)
+            _ = self.redis.expire(host, datetime.timedelta(minutes=1))
+            return
+        
+        increase_requests_counter = self.redis.incrby(user_key, 1)
+        if increase_requests_counter > 10:
+            self.redis.sadd("banned", user_key)
+            raise HTTPException(status_code=403, detail="BANNED!")
+        
+        return  
 
 
     def set_redis(self, key: str, value: any, keepttl: Optional[bool] = False) -> Optional[bool]:

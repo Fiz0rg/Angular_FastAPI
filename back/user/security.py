@@ -24,7 +24,6 @@ def verify_password(planed_password: str, hash_password: str):
     return pwd_context.verify(planed_password, hash_password)
 
 
-
 async def authenticate_user(username: str, password: str):
     user = await Buyer.objects.get(username=username)
     if any([user, verify_password(password, user.password)]):

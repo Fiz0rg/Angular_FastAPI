@@ -1,3 +1,5 @@
+import datetime
+
 from typing import List
 
 from fastapi import APIRouter, Depends, Request
@@ -19,6 +21,12 @@ from .repository import (
 
 
 router = APIRouter()
+
+
+@router.get('/a')
+def test(request: Request):
+    return redis_instanse.checking_ips_addresses(request.client.host)
+    # return str(datetime.datetime.now()).replace(" ", "**")
 
 
 @router.get("/aa_mongo")
