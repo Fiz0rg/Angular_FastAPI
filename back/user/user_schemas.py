@@ -1,4 +1,6 @@
 from fastapi import Form
+from pydantic import EmailStr
+
 
 from basket.schemas import BaseSchemaModel
 
@@ -19,9 +21,10 @@ class UserAdminSchema(UserCreate):
     is_admin: bool
 
 
-class UserForm(BaseSchemaModel):
-    username: str = Form(...)
-    password: str = Form(...)
+class RegistrationForm(BaseSchemaModel):
+    username: str 
+    gmail: EmailStr
+    password: str
 
 
 

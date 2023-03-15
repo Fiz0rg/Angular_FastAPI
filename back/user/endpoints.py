@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from pydantic import parse_obj_as
 
-from .user_schemas import UserAdminSchema, UserCreate
+from .user_schemas import UserAdminSchema, UserCreate, RegistrationForm
 from .token_schemas import Token
 
 from .repository import (
@@ -35,10 +35,10 @@ async def create_admin(admin: UserAdminSchema = Depends(create_admin)) -> UserAd
     return UserAdminSchema.from_orm(admin)
 
 
-@router.post("/registration", response_model=UserAdminSchema)
-async def create_user(new_user: UserAdminSchema = Depends(registration)) -> UserAdminSchema:
+@router.post("/registration", response_model=JSONResponse)
+async def create_user(new_user: RegistrationForm = Depends(registration)) -> JSONResponse:
 
-    return UserAdminSchema.from_orm(new_user)
+    return JSONResponse(content="Follow the link in your gmail", status_code=200)
 
 
 @router.post("/token", response_model=Token)

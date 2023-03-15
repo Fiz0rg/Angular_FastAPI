@@ -1,13 +1,23 @@
 from typing import List
 
-from fastapi import Depends
+from jose import jwe
+
+from fastapi import Depends, HTTPException
+from fastapi.responses import JSONResponse
 from fastapi_jwt_auth import AuthJWT
+
+from config import SMTP_SECRET_KEY
 
 from .user_schemas import UserAdminSchema, UserCreate
 from .security import Settings, hash_password
 from .model import Buyer
 
 from basket.model import Basket
+from tasks.tasks import auth_gmail_letter
+from cache_redis.repository import RebiuldedRedis
+
+
+redis_instanse = RebiuldedRedis(expire_time=30, db=3)
 
 
 @AuthJWT.load_config
@@ -35,9 +45,30 @@ async def create_admin() -> UserAdminSchema:
     return create_admin
 
     
-async def registration(new_user: UserCreate):
+async def registration(new_user: UserCreate) -> Buyer:
     return await create_user(new_user, Buyer)
 
+
+async def pre_registration(user_id: int, user_gmail: str) -> JSONResponse:
+    check_existing_user: Buyer = Buyer.objects.get(id=user_id)
+
+    if not check_existing_user:
+        raise HTTPException(status_code=403, detail="user already exist")
+
+    encrypted_user_id: str = jwe.encrypt(str(user_id), SMTP_SECRET_KEY, algorithm="dir", encryption="A256GCM")
+
+    redis_instanse.set_redis(user_id, encrypted_user_id)
+    redis_instanse.set_expire_time(user_id, expire_time=1800)
+
+    confirmation_link: str = f"http://127.0.0.1:8000/user_id={encrypted_user_id}"
+
+    auth_gmail_letter.delay(
+        confirmation_link=confirmation_link,
+        user_gmail=user_gmail
+    )
+
+    return JSONResponse(content="Пройдите на вашу почту, пройдите по ссылке подтверждения")
+    
 
 async def checking(username: str) -> UserAdminSchema:
     return await Buyer.objects.get(username=username)

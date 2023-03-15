@@ -5,7 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi_jwt_auth .exceptions import AuthJWTException
 
+from tasks.settings import cel
+
 # from .product_photo.endpoint import router as product_photo_router
+
 from basket.endpoint import router as basket_router
 from product_category.endpoint import router as category_router
 from user.endpoints import router as user_router

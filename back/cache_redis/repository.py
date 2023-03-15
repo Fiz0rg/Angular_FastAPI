@@ -23,7 +23,8 @@ class RebiuldedRedis:
         encoding: str = "utf-8"
     ):
         self.encoding = encoding
-        self.redis = Redis(host=host, port=port)
+        self.db = db
+        self.redis = Redis(host=host, port=port, db=self.db)
         self._expire_time = expire_time or self._default_ex_time
 
 
@@ -73,6 +74,10 @@ class RebiuldedRedis:
             value=dumbs_value
         )
         return request
+    
+    
+    def set_expire_time(self, key: any[str, int, float], expire_time: int) -> None: 
+        self.redis.expire(key, expire_time)
 
 
     def set_lpush_redis(self, list_of_values, username: str) -> Optional[bool]:
