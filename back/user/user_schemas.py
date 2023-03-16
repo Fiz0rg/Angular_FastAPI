@@ -21,6 +21,10 @@ class UserAdminSchema(UserCreate):
     is_admin: bool
 
 
+class UserForm(UserName, PasswordUser):
+    pass
+
+
 class RegistrationForm(BaseSchemaModel):
     username: str 
     gmail: EmailStr

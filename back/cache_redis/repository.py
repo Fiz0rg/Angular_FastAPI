@@ -76,7 +76,7 @@ class RebiuldedRedis:
         return request
     
     
-    def set_expire_time(self, key: any[str, int, float], expire_time: int) -> None: 
+    def set_expire_time(self, key: any([str, int, float]), expire_time: int) -> None: 
         self.redis.expire(key, expire_time)
 
 
