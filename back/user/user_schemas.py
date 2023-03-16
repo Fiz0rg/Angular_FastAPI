@@ -13,11 +13,15 @@ class PasswordUser(BaseSchemaModel):
     password: str
 
 
+class GmailUser(BaseSchemaModel):
+    gmail: EmailStr
+
+
 class UserCreate(UserName, PasswordUser):
     pass
 
 
-class UserAdminSchema(UserCreate):
+class UserAdminSchema(UserCreate, GmailUser):
     is_admin: bool
 
 

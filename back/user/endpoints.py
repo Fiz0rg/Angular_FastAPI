@@ -10,6 +10,7 @@ from pydantic import parse_obj_as
 
 from .user_schemas import UserAdminSchema, UserCreate, RegistrationForm
 from .token_schemas import Token
+from .model import Buyer
 
 from .repository import (
     create_admin,
@@ -29,6 +30,11 @@ load_dotenv('.env')
 
 router = APIRouter()
 
+@router.get("/aaa")
+async def aaa():
+    result = await Buyer.objects.get(id=1)
+    return result
+
 
 @router.post("/create_admin", response_model=UserAdminSchema)
 async def create_admin(admin: UserAdminSchema = Depends(create_admin)) -> UserAdminSchema:
@@ -40,7 +46,7 @@ async def create_admin(admin: UserAdminSchema = Depends(create_admin)) -> UserAd
 @router.post("/registration", response_model=Dict[str, str])
 async def create_user(new_user: RegistrationForm) -> JSONResponse:
 
-    await pre_registration(new_token)
+    await pre_registration(new_user)
 
     return JSONResponse(content={"response": "Follow the link in your gmail"}, status_code=200)
 
@@ -72,7 +78,7 @@ async def final_registration_stage(request: Request) -> JSONResponse:
 
     encrypted_user = request.url.path
     result = await active_user(encrypted_user)
-    
+
     if not result:
         raise HTTPException(status_code=304)
     

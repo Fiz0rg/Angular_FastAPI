@@ -7,9 +7,9 @@ from .letter_func import gmail_registration_letter
 
 
 @tasker.task
-def auth_gmail_letter(confirmation_link: str) -> None:
+def auth_gmail_letter(confirmation_link: str, user_gmail: str) -> None:
 
-    message = gmail_registration_letter(confirmation_link)
+    message = gmail_registration_letter(confirmation_link, user_gmail)
     with SMTP_SSL(host=SMTP_HOST, port=SMTP_PORT) as postman:
         postman.login(SMTP_USER, SMTP_PASSWORD)
         postman.send_message(message)
