@@ -1,7 +1,7 @@
 from typing import List
 from datetime import datetime
 
-from jose import jwe
+from jose import jwt
 
 from fastapi import Depends, HTTPException
 from fastapi.responses import JSONResponse
@@ -18,7 +18,7 @@ from tasks.tasks import auth_gmail_letter
 from cache_redis.repository import RebiuldedRedis
 
 
-redis_instanse = RebiuldedRedis(expire_time=30, db=3)
+redis_instanse = RebiuldedRedis(expire_time=30)
 
 
 @AuthJWT.load_config
@@ -50,24 +50,28 @@ async def create_admin() -> UserAdminSchema:
 async def active_user(encrypted_user_id: str) -> bool:
 
     splitting_url_path: str = encrypted_user_id.split("=")[1]
-    decrypted_user_id: str = (jwe.decrypt(splitting_url_path, SMTP_SECRET_KEY)).decode("utf-8")
+    decode_user_info: dict = jwt.decode(splitting_url_path, key=SMTP_SECRET_KEY, algorithms="HS256")    
 
-    get_value_from_redis = redis_instanse.get_redis_by_key(decrypted_user_id)
+    user_id, user_gmail = next(iter(decode_user_info.items()))
+
+    get_value_from_redis: str = redis_instanse.get_redis_by_key(user_id)
 
     if not get_value_from_redis:
         raise HTTPException(status_code=404, detail="Your link was expire. Please, repeat auth process")
+
+    get_value_from_redis = get_value_from_redis.replace('"', '')
     
     if splitting_url_path != get_value_from_redis:
         raise HTTPException(status_code=406, detail="Your encrypted value don't match with currently existing. Repeat auth process if you're not hacker")
     
-    activate_user = await Buyer.objects.get(id=decrypted_user_id)
+    activate_user = await Buyer.objects.get(id=int(user_id))
     activate_user.is_activate = True
     activate_user.creation_datetime = datetime.now()
 
     await activate_user.update(_columns=["is_activate", "creation_datetime"])
     await activate_user.load()
     
-    return 
+    return True
 
 
 async def pre_registration(user: RegistrationForm) -> JSONResponse:
@@ -79,17 +83,20 @@ async def pre_registration(user: RegistrationForm) -> JSONResponse:
         raise HTTPException(status_code=403, detail="user already exist")
     
     create_not_active_user: Buyer = await create_user(user)
-    print(create_not_active_user)
 
     if not create_not_active_user:
         raise HTTPException(status_code=401, detail="Something went wrong")
 
-    encrypted_user_id: str = jwe.encrypt(str(create_not_active_user.id), SMTP_SECRET_KEY, algorithm="dir", encryption="A256GCM")
+    
 
-    redis_instanse.set_redis(create_not_active_user.id, encrypted_user_id)
+    # encrypted_user_id: bytes = jwe.encrypt(str(create_not_active_user.id), SMTP_SECRET_KEY, algorithm="dir", encryption="A256GCM")
+
+    encode_user_info: str = jwt.encode({str(create_not_active_user.id): create_not_active_user.gmail}, key=SMTP_SECRET_KEY, algorithm="HS256")
+
+    redis_instanse.set_redis(create_not_active_user.id, encode_user_info)
     redis_instanse.set_expire_time(create_not_active_user.id, expire_time=1800)
 
-    confirmation_link: str = f"http://127.0.0.1:8000/user_id={encrypted_user_id}"
+    confirmation_link: str = f"http://127.0.0.1:8000/user/user_id={encode_user_info}"
 
     auth_gmail_letter.delay(
         confirmation_link=confirmation_link,

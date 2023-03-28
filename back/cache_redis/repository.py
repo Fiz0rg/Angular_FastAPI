@@ -24,7 +24,7 @@ class RebiuldedRedis:
     ):
         self.encoding = encoding
         self.db = db
-        self.redis = Redis(host=host, port=port, db=self.db)
+        self.redis = Redis(host=host, port=port, db=self.db, decode_responses=True)
         self._expire_time = expire_time or self._default_ex_time
 
 
@@ -39,7 +39,7 @@ class RebiuldedRedis:
         if not response:
             raise HTTPException(status_code=404, detail="Not found")
 
-        return response.decode("utf-8")
+        return response
 
 
     def checking_ips_addresses(self, host: str) -> bool:

@@ -81,5 +81,5 @@ async def final_registration_stage(request: Request) -> JSONResponse:
 
     if not result:
         raise HTTPException(status_code=304)
-    
+        
     return JSONResponse (status_code=200, content={"congrats": "You have beed registrated!"})

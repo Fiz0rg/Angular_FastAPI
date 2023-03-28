@@ -1,0 +1,12 @@
+__pycache__/
+__init__.py
+
+
+.vscode/
+
+alembic.ini
+migrations/
+
+.env
+
+venv/
